@@ -80,8 +80,9 @@
 @media (hover: hover) { .pd__page:hover .pd__page-name { font-style: italic; transform: translateX(-6px); } .pd__page--next:hover .pd__page-name { transform: translateX(6px); } }
 
 /* ---------- password ---------- */
-.pw-page { overflow: hidden; }
-.pw { position: relative; overflow: clip; height: 100svh; min-height: 720px; display: flex; flex-direction: column; align-items: center; padding: calc(var(--header-h) + 8vh) 24px 0; }
+.pw-page { overflow-x: hidden; }
+/* the landing page is at least one screen tall and grows (and scrolls) when its content needs more */
+.pw { position: relative; overflow-x: clip; min-height: 100svh; display: flex; flex-direction: column; align-items: center; padding: calc(var(--header-h) + 8vh) 24px 0; }
 .pw__box { position: relative; z-index: 2; width: min(800px, 100%); display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center; }
 .pw__box > .cap { margin: 0; }
 .pw__title { margin: 0; font-weight: 300; font-size: 80px; line-height: 80px; letter-spacing: -.05em; text-transform: uppercase; }
@@ -100,7 +101,8 @@
 .pw__form.is-ok .pw__row { background: var(--ink); border-style: solid; }
 .pw__form.is-ok .pw__input { color: var(--paper); }
 /* the nine looks stand in a line on the floor, slightly overlapping */
-.pw__line { position: absolute; left: 50%; bottom: 0; z-index: 1; display: flex; align-items: flex-end; transform: translateX(-50%); pointer-events: none; }
+/* the line stands at the bottom of the first screen when there is room, otherwise it follows the content */
+.pw__line { position: relative; z-index: 1; display: flex; align-items: flex-end; justify-content: center; margin-top: auto; padding-top: 48px; pointer-events: none; }
 /* the line fits however many models the landing page has (--n is set by the section) */
 .pw__line { --h: min(28svh, 320px, calc(94vw / var(--fit, 4.1))); }
 .pw__fig { position: relative; height: var(--h); aspect-ratio: var(--ar, 4 / 7); max-width: 94vw; margin: 0 calc(var(--h) * -.07); animation: item-in 1.2s var(--ease) backwards; animation-delay: calc(.2s + var(--i) * 70ms); }
@@ -134,10 +136,8 @@
   .pd__pager .pill { grid-row: 2; grid-column: 1 / -1; justify-self: center; }
   .pd__page-name { font-size: 16px; line-height: 16px; }
   .pw { padding-top: calc(var(--header-h) + 4vh); }
-  .pw { min-height: 640px; }
   /* phone: the line follows the text instead of standing at the bottom of the screen */
-  .pw { height: auto; min-height: 100svh; padding-bottom: 0; }
-  .pw__line { --h: min(30svh, 240px, calc(92vw / var(--fit, 4.1))); position: relative; left: auto; bottom: auto; transform: none; margin-top: 40px; }
+  .pw__line { --h: min(30svh, 240px, calc(92vw / var(--fit, 4.1))); margin-top: 0; padding-top: 40px; }
   .pw__count b { font-size: 32px; line-height: 32px; }
   .pw__count li { min-width: 64px; }
   .pw__switch { min-height: 32px; padding: 0 12px; }
@@ -411,7 +411,7 @@ main:focus { outline: none; }
 .pw__panel { width: min(480px, 100%); display: flex; justify-content: center; }
 .pw__row.is-done { background: var(--ink); border-style: solid; }
 .pw__row.is-done .pw__input { display: flex; align-items: center; color: var(--paper); text-transform: uppercase; font-size: 12px; letter-spacing: .02em; }
-.pw--404 { height: auto; min-height: 70svh; }
+.pw--404 { min-height: 70svh; }
 .search__form { width: min(560px, 100%); }
 .gift { gap: 12px; }
 .gift__code { font-size: 24px; letter-spacing: .1em; font-variant-numeric: tabular-nums; }
@@ -429,7 +429,7 @@ main:focus { outline: none; }
 }
 
 /* landing: optional background photo (Customize → Password page → Background photo) */
-.pw__bg { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+.pw__bg { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
 .pw__bg img { width: 100%; height: 100%; object-fit: cover; object-position: var(--bg-pos, 50% 50%); animation: pw-bg 1.6s var(--ease) backwards; }
 .pw__bg::after { content: ""; position: absolute; inset: 0; background: var(--studio); opacity: var(--bg-veil, .35); }
 @keyframes pw-bg { from { opacity: 0; transform: scale(1.04); } }
@@ -437,11 +437,13 @@ main:focus { outline: none; }
 
 /* landing: image above the title (Customize → Password page → Image) */
 .pw__image { width: min(var(--img-w, 320px), 100%); animation: item-in 1.1s var(--ease) backwards; }
+.pw__image--below_title { margin: 8px 0; }
+.pw__image--below_form { margin-top: 24px; }
 .pw__image img { display: block; width: 100%; height: auto; max-height: 40svh; object-fit: contain; }
 
 /* landing: background video */
 .pw__bg video { display: block; width: 100%; height: 100%; object-fit: cover; object-position: var(--bg-pos, 50% 50%); animation: pw-bg 1.6s var(--ease) backwards; }
-.pw__vidbtn { position: absolute; left: 24px; bottom: 24px; z-index: 3; min-height: 32px; min-width: 72px; }
+.pw__vidbtn { position: fixed; left: 24px; bottom: 24px; z-index: 3; min-height: 32px; min-width: 72px; }
 .pw__vidbtn[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-style: solid; }
 @media (max-width: 809px) { .pw__vidbtn { left: 16px; bottom: 16px; } }
 /* over a photo or video, grey text loses contrast: use ink */
