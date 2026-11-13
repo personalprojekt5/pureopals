@@ -6,32 +6,11 @@
 // 8 view (lightbox + pins) · 9 receipt & bag · 10 index menu · 11 mini menu · 12 grid · 13 clock · 14 boot.
 
 // ---------- 1. data ----------
-type Piece = { name: string; kind: string; price: number; img: string; sizes: string[] }
-type Look = { name: string; img: string; small: string; shadow: string; foot: number; pins: [number, number][]; pieces: Piece[] }
-const IMG = "https://demo.filatov.design/kit/dfadfe5e0f2b1a44/v3/images/"
-const TOP = ["S", "M", "L", "XL"], SHOE = ["40", "41", "42", "43", "44", "45"], ONE = ["One size"]
-// i: file number · foot: empty share under the feet (prep-media.py prints it) · pins: % of the cut-out
-const look = (i: number, name: string, foot: number, pins: [number, number][], pieces: [string, string, number, string[]][]): Look => ({
-  name, foot, pins,
-  img: `${IMG}look-${i}.webp`, small: `${IMG}look-${i}-s.webp`, shadow: `${IMG}shadow-${i}.webp`,
-  pieces: pieces.map(([n, k, p, s], j) => ({ name: n, kind: k, price: p, sizes: s, img: `${IMG}piece-${i}-${j + 1}.webp` })),
-})
-const LOOKS: Look[] = [
-  look(1, "Do Not Disturb", .0406, [[74, 32], [30, 47], [50, 57]], [["Washed Boxy Tee", "Top", 44, TOP], ["Ringer Long Sleeve", "Top", 38, TOP], ["Studded Belt", "Accessory", 34, ONE]]),
-  look(2, "Shuffle", .095, [[80, 35], [41, 67], [38, 85]], [["Nylon Harrington", "Outerwear", 138, TOP], ["Track Trousers", "Bottom", 88, TOP], ["Silver Runners", "Shoes", 132, SHOE]]),
-  look(3, "Repeat One", .0506, [[80, 38], [27, 74], [72, 91]], [["Brushed Cardigan", "Top", 96, TOP], ["Faded Baggy Jeans", "Bottom", 112, TOP], ["Trail Runners", "Shoes", 128, SHOE]]),
-  look(4, "Signal Lost", .0813, [[72, 32], [42, 62], [20, 86]], [["Cobalt Track Jacket", "Outerwear", 112, TOP], ["Cargo Trousers", "Bottom", 98, TOP], ["Chrome Runners", "Shoes", 124, SHOE]]),
-  look(5, "Off Grid", .0506, [[62, 32], [45, 74], [43, 92]], [["Cable Knit Sweater", "Top", 124, TOP], ["Utility Cargo", "Bottom", 102, TOP], ["Canvas Skate Shoes", "Shoes", 72, SHOE]]),
-  look(6, "Static", .0125, [[80, 38], [72, 66], [35, 83]], [["Metallic Bomber", "Outerwear", 164, TOP], ["Dirty Wash Jeans", "Bottom", 118, TOP], ["Mesh Runners", "Shoes", 126, SHOE]]),
-  look(7, "Side A", .0919, [[63, 32], [29, 69], [73, 86]], [["Cropped Sweatshirt", "Top", 68, TOP], ["Wide Cord Trousers", "Bottom", 96, TOP], ["Leather Court Shoes", "Shoes", 110, SHOE]]),
-  look(8, "Airplane Mode", .0462, [[20, 34], [37, 74], [56, 90]], [["Panel Camp Shirt", "Top", 78, TOP], ["Parachute Pants", "Bottom", 92, TOP], ["White Trainers", "Shoes", 112, SHOE]]),
-  look(9, "Slow Hours", .0619, [[72, 36], [40, 66], [40, 90]], [["Knit Polo", "Top", 82, TOP], ["Pleated Chinos", "Bottom", 90, TOP], ["Suede Trainers", "Shoes", 138, SHOE]]),
-]
+import { LOOKS, money, pad, productUrl, shopUrl, type Look } from "./data"
+import { addToBag, paintCount } from "./bag"
 const N = LOOKS.length
 // ring seen from above: radius and perspective as shares of the stage width (phone values second)
 const RING = { R: .44, Rm: .84, P: .8, Pm: 1.1, horizon: .06, fit: 1.12, front: 1.165, frontM: 1.12, step: .03, lift: 40 }
-const money = (v: number) => "$" + (Math.round(v * 100) / 100).toFixed(v % 1 ? 2 : 0)
-const pad = (i: number) => String(i).padStart(2, "0")
 const SIZES = "(max-width: 809px) 240px, 360px"
 const pic = (L: Look, cls: string, alt: string, extra = "") =>
   `<img class="rw__cast" src="${L.shadow}" alt="" aria-hidden="true" draggable="false" decoding="async">` +
@@ -312,13 +291,12 @@ function hot(p: number, reveal = false) {
 // ---------- 9. receipt & bag ----------
 type State = { added: boolean; size: string; touched: boolean }
 const state = LOOKS.map((L) => L.pieces.map((p): State => ({ added: false, size: p.sizes[p.sizes.length > 1 ? 1 : 0], touched: p.sizes.length === 1 })))
-let bag = 0
 function renderReceipt() {
   const L = LOOKS[index], S = state[index]
   $("rlook").textContent = `Look ${pad(index + 1)} — ${L.name}`
   itemsEl.innerHTML = L.pieces.map((p, j) => `
     <li class="rw__item${S[j].added ? " is-added" : ""}" data-p="${j + 1}">
-      <span class="rw__name">${p.name}</span><span class="rw__price">${money(p.price)}</span>
+      <a class="rw__name" href="${productUrl(p)}">${p.name}</a><span class="rw__price">${money(p.price)}</span>
       <span class="rw__kind cap">${p.kind}</span>
       <button class="rw__add" type="button" aria-expanded="false" aria-label="Add to bag: ${p.name}"></button>
       <div class="rw__picker" hidden>
@@ -339,8 +317,7 @@ function addPieces(js: number[]) {
     row?.classList.add("is-added"); row?.classList.remove("is-picking"); row?.querySelector(".rw__picker")?.setAttribute("hidden", "")
     row?.querySelector(".rw__add")?.setAttribute("aria-label", `In bag: ${LOOKS[index].pieces[j].name}`)
   })
-  bag += js.length
-  document.querySelectorAll<HTMLElement>("[data-count]").forEach((c) => { c.textContent = String(bag); c.classList.remove("bump"); void c.offsetWidth; c.classList.add("bump") })
+  addToBag(js.map((j) => ({ slug: LOOKS[index].pieces[j].slug, size: state[index][j].size })))
   toast(js.length > 1 ? "Look saved to your bag" : "Piece saved to your bag")
   panel.classList.toggle("is-complete", S.every((s) => s.added))
 }
@@ -448,7 +425,12 @@ new ResizeObserver(() => measure()).observe(stage)
 new IntersectionObserver((es) => { visible = es[es.length - 1].isIntersecting; if (visible) kick() }).observe(stage)
 document.addEventListener("visibilitychange", () => { if (!document.hidden) { kick(); restartTimer() } })
 $("nowt").textContent = pad(N)
+// deep link: #look-3 opens the ring on look 03 (the shop and product pages link here)
+const deep = /^#look-(\d+)$/.exec(location.hash), start = deep ? clamp(+deep[1] - 1, 0, N - 1) : 0
+if (start) { target = start; cur = calm ? start : start - 1.15 }
+document.querySelectorAll<HTMLAnchorElement>("[data-shop]").forEach((a) => (a.href = shopUrl()))
+paintCount()
 measure()
-setIndex(0, true)
+setIndex(start, true)
 play(playing)
 kick()
