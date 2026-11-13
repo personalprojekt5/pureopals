@@ -12,6 +12,7 @@
     "logo": "shopify://shop_images/pureopalsheader2_e925f7a4-a5d1-410f-9e94-49eae43e7621.png",
     "logo_width": 180,
     "logo_reg": true,
+    "favicon": "shopify://shop_images/ig.png",
     "color_studio": "#ECECEC",
     "color_paper": "#FFFFFF",
     "color_ink": "#000000",
