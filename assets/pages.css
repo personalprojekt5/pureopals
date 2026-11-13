@@ -102,8 +102,8 @@
 /* the nine looks stand in a line on the floor, slightly overlapping */
 .pw__line { position: absolute; left: 50%; bottom: 0; z-index: 1; display: flex; align-items: flex-end; transform: translateX(-50%); pointer-events: none; }
 /* the line fits however many models the landing page has (--n is set by the section) */
-.pw__line { --h: min(28svh, 320px, calc(220vw / var(--n, 9))); }
-.pw__fig { position: relative; height: var(--h); aspect-ratio: 4 / 7; margin: 0 calc(var(--h) * -.07); animation: item-in 1.2s var(--ease) backwards; animation-delay: calc(.2s + var(--i) * 70ms); }
+.pw__line { --h: min(28svh, 320px, calc(94vw / var(--fit, 4.1))); }
+.pw__fig { position: relative; height: var(--h); aspect-ratio: var(--ar, 4 / 7); max-width: 94vw; margin: 0 calc(var(--h) * -.07); animation: item-in 1.2s var(--ease) backwards; animation-delay: calc(.2s + var(--i) * 70ms); }
 .pw__fig img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: 50% 100%; transform: translateY(calc(var(--foot, 0) * 100% - 4%)); }
 .pw__fig .pw__cast { left: -25%; width: 150%; object-fit: fill; }
 
@@ -135,7 +135,9 @@
   .pd__page-name { font-size: 16px; line-height: 16px; }
   .pw { padding-top: calc(var(--header-h) + 4vh); }
   .pw { min-height: 640px; }
-  .pw__line { --h: min(24svh, 220px, calc(240vw / var(--n, 9))); }
+  /* phone: the line follows the text instead of standing at the bottom of the screen */
+  .pw { height: auto; min-height: 100svh; padding-bottom: 0; }
+  .pw__line { --h: min(30svh, 240px, calc(92vw / var(--fit, 4.1))); position: relative; left: auto; bottom: auto; transform: none; margin-top: 40px; }
   .pw__count b { font-size: 32px; line-height: 32px; }
   .pw__count li { min-width: 64px; }
   .pw__switch { min-height: 32px; padding: 0 12px; }
