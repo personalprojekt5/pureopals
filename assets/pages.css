@@ -436,3 +436,11 @@ main:focus { outline: none; }
 /* landing: image above the title (Customize → Password page → Image) */
 .pw__image { width: min(var(--img-w, 320px), 100%); animation: item-in 1.1s var(--ease) backwards; }
 .pw__image img { display: block; width: 100%; height: auto; max-height: 40svh; object-fit: contain; }
+
+/* landing: background video */
+.pw__bg video { display: block; width: 100%; height: 100%; object-fit: cover; object-position: var(--bg-pos, 50% 50%); animation: pw-bg 1.6s var(--ease) backwards; }
+.pw__vidbtn { position: absolute; left: 24px; bottom: 24px; z-index: 3; min-height: 32px; min-width: 72px; }
+.pw__vidbtn[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-style: solid; }
+@media (max-width: 809px) { .pw__vidbtn { left: 16px; bottom: 16px; } }
+/* over a photo or video, grey text loses contrast: use ink */
+.pw.has-bg .pw__sub, .pw.has-bg .pw__note, .pw.has-bg .pw__msg { color: var(--ink); }
