@@ -67,6 +67,8 @@ export default defineConfig({
         main: resolve(root, "index.html"),
         password: resolve(root, "password.html"),
         shop: resolve(root, "shop.html"),
+        faq: resolve(root, "faq.html"),
+        journal: resolve(root, "journal.html"),
         ...productInputs,
       },
     },
