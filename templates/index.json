@@ -199,9 +199,7 @@
         "index_label": "Index · Drop 01",
         "menu": "main-menu",
         "lb_hint": "Tap a dot to shop the piece",
-        "show_qr": false,
-        "index_button_label": "Editorial",
-        "index_button_link": "/pages/editorial"
+        "show_qr": false
       }
     }
   },
