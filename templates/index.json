@@ -104,6 +104,7 @@
         },
         "look_6": {
           "type": "look",
+          "disabled": true,
           "settings": {
             "name": "Static",
             "model_url": "https://demo.filatov.design/kit/dfadfe5e0f2b1a44/v3/images/look-6.webp",
@@ -122,6 +123,7 @@
         },
         "look_7": {
           "type": "look",
+          "disabled": true,
           "settings": {
             "name": "Side A",
             "model_url": "https://demo.filatov.design/kit/dfadfe5e0f2b1a44/v3/images/look-7.webp",
@@ -140,6 +142,7 @@
         },
         "look_8": {
           "type": "look",
+          "disabled": true,
           "settings": {
             "name": "Airplane Mode",
             "model_url": "https://demo.filatov.design/kit/dfadfe5e0f2b1a44/v3/images/look-8.webp",
@@ -158,6 +161,7 @@
         },
         "look_9": {
           "type": "look",
+          "disabled": true,
           "settings": {
             "name": "Slow Hours",
             "model_url": "https://demo.filatov.design/kit/dfadfe5e0f2b1a44/v3/images/look-9.webp",
@@ -188,16 +192,14 @@
       ],
       "settings": {
         "title": "Go touch some grass, <em>dude.</em>",
-        "subtitle": "Drop 01. Nine looks for logging off. Drag the ring, pick a look, tap a dot to shop the piece.",
+        "subtitle": "Drop 01. Five looks for logging off. Drag the ring, pick a look, tap a dot to shop the piece.",
         "receipt_line": "Drop 01 · Store 001 · Prague",
         "receipt_thanks": "Thank you for logging off",
         "discount": 0,
         "index_label": "Index · Drop 01",
         "menu": "main-menu",
         "lb_hint": "Tap a dot to shop the piece",
-        "show_qr": false,
-        "index_button_label": "Editorial",
-        "index_button_link": "/pages/editorial"
+        "show_qr": false
       }
     }
   },
