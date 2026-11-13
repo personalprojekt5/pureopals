@@ -448,3 +448,9 @@ main:focus { outline: none; }
 @media (max-width: 809px) { .pw__vidbtn { left: 16px; bottom: 16px; } }
 /* over a photo or video, grey text loses contrast: use ink */
 .pw.has-bg .pw__sub, .pw.has-bg .pw__note, .pw.has-bg .pw__msg { color: var(--ink); }
+
+/* landing: "Show the whole photo": the photo runs the full width at its own proportions and the page is at
+   least as tall as the photo, so scrolling reveals all of it (instead of a fixed, cropped screen) */
+.pw.has-bg-full { min-height: max(100svh, calc(100vw / var(--bg-ar, 1.5))); }
+.pw__bg--full { position: absolute; inset: 0 0 auto; height: calc(100vw / var(--bg-ar, 1.5)); min-height: 100%; }
+.pw__bg--full img { height: 100%; object-fit: cover; object-position: 50% 0; }
