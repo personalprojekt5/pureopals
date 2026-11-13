@@ -1,0 +1,86 @@
+{
+  "sections": {
+    "main": {
+      "type": "editorial",
+      "blocks": {
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "kicker": "Editorial · Drop 01",
+            "title": "Go touch some grass, <em>dude.</em>",
+            "intro": "Nine friends, one floor, no signal. We asked everyone to leave their phone at the door. What was left was the clothes, and the people in them."
+          }
+        },
+        "film": {
+          "type": "video",
+          "settings": {
+            "mode": "click",
+            "ratio": "16 / 9",
+            "width": "wide",
+            "title": "Drop 01 — Go touch some grass",
+            "caption": "Campaign film"
+          }
+        },
+        "story": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Write the story of the collection here: where it was shot, who was there, what it's about.</p>"
+          }
+        },
+        "spread_1": {
+          "type": "spread",
+          "settings": {
+            "kicker": "Chapter 01",
+            "heading": "Do Not <em>Disturb</em>",
+            "text": "<p>A few lines about the first look.</p>",
+            "link_label": "Shop the look",
+            "link": "/collections/all",
+            "flip": false
+          }
+        },
+        "quote": {
+          "type": "quote",
+          "settings": {
+            "quote": "“Nobody posted anything that day. <em>Everybody remembers it.</em>”",
+            "by": ""
+          }
+        },
+        "spread_2": {
+          "type": "spread",
+          "settings": {
+            "kicker": "Chapter 02",
+            "heading": "Signal <em>Lost</em>",
+            "text": "<p>A few lines about the second look.</p>",
+            "link_label": "Shop the look",
+            "link": "/collections/all",
+            "flip": true
+          }
+        },
+        "button": {
+          "type": "button",
+          "settings": {
+            "label": "Shop the drop",
+            "link": "/collections/all",
+            "style": "solid"
+          }
+        }
+      },
+      "block_order": [
+        "heading",
+        "film",
+        "story",
+        "spread_1",
+        "quote",
+        "spread_2",
+        "button"
+      ],
+      "settings": {
+        "title": "",
+        "crumb": "Drop 01"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

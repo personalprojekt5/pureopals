@@ -1,0 +1,199 @@
+{%- comment -%}
+  Editorial: a page built from blocks in the theme editor: heading, text, image, image + text spread, quote,
+  video, button, and the page's own text from Shopify admin. Use with the page.editorial template.
+  Videos: YouTube / Vimeo link or a video uploaded to Shopify; either a Play button (nothing loads until
+  pressed, assets/offline-films.js) or a silent loop that plays by itself.
+{%- endcomment -%}
+<article class="ed" aria-labelledby="ed-title-{{ section.id }}">
+  <div class="shop__head">
+    <nav class="crumbs cap" aria-label="Breadcrumb"><a href="{{ routes.root_url }}">{{ section.settings.crumb | escape }}</a><span aria-hidden="true">/</span><span aria-current="page">{{ page.title | default: 'Editorial' | escape }}</span></nav>
+    <h1 class="shop__title" id="ed-title-{{ section.id }}">{{ section.settings.title | default: page.title }}</h1>
+  </div>
+
+  {%- for block in section.blocks -%}
+    {%- case block.type -%}
+
+      {%- when 'heading' -%}
+        <header class="jr__story-head ed__block" {{ block.shopify_attributes }}>
+          {%- if block.settings.kicker != blank -%}<p class="cap">{{ block.settings.kicker | escape }}</p>{%- endif -%}
+          {%- if block.settings.title != blank -%}<h2 class="jr__story-title">{{ block.settings.title }}</h2>{%- endif -%}
+          {%- if block.settings.intro != blank -%}<p class="jr__lead">{{ block.settings.intro | escape }}</p>{%- endif -%}
+        </header>
+
+      {%- when 'text' -%}
+        <div class="ed__text rte ed__block" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
+
+      {%- when 'page_content' -%}
+        {%- if page.content != blank -%}<div class="ed__text rte ed__block" {{ block.shopify_attributes }}>{{ page.content }}</div>{%- endif -%}
+
+      {%- when 'image' -%}
+        <figure class="ed__image ed__image--{{ block.settings.width }} ed__block" {{ block.shopify_attributes }}>
+          {%- if block.settings.image != blank -%}
+            {%- assign alt = block.settings.image.alt | default: block.settings.caption | default: '' -%}
+            {{ block.settings.image | image_url: width: 2400 | image_tag: alt: alt, widths: '480, 750, 1100, 1500, 1800, 2400', sizes: '(max-width: 809px) 100vw, 90vw', loading: 'lazy' }}
+          {%- else -%}
+            {{ 'lifestyle-1' | placeholder_svg_tag: 'ed__ph' }}
+          {%- endif -%}
+          {%- if block.settings.caption != blank -%}<figcaption class="cap pd__muted">{{ block.settings.caption | escape }}</figcaption>{%- endif -%}
+        </figure>
+
+      {%- when 'spread' -%}
+        <section class="jr__spread{% if block.settings.flip %} jr__spread--flip{% endif %} ed__block" {{ block.shopify_attributes }}>
+          <div class="jr__fig">
+            {%- if block.settings.image != blank -%}
+              {%- assign alt = block.settings.image.alt | default: '' -%}
+              {{ block.settings.image | image_url: width: 1600 | image_tag: alt: alt, widths: '480, 720, 1000, 1400, 1600', sizes: '(max-width: 809px) 100vw, 50vw', loading: 'lazy', class: 'jr__img' }}
+            {%- else -%}
+              {{ 'lifestyle-2' | placeholder_svg_tag: 'ed__ph' }}
+            {%- endif -%}
+          </div>
+          <div class="jr__text">
+            {%- if block.settings.kicker != blank -%}<p class="cap">{{ block.settings.kicker | escape }}</p>{%- endif -%}
+            {%- if block.settings.heading != blank -%}<h3 class="jr__h">{{ block.settings.heading }}</h3>{%- endif -%}
+            {%- if block.settings.text != blank -%}<div class="rte">{{ block.settings.text }}</div>{%- endif -%}
+            {%- if block.settings.link_label != blank and block.settings.link != blank -%}<a class="cap pd__link" href="{{ block.settings.link }}">{{ block.settings.link_label | escape }}</a>{%- endif -%}
+          </div>
+        </section>
+
+      {%- when 'quote' -%}
+        <blockquote class="jr__quote ed__block" {{ block.shopify_attributes }}><p>{{ block.settings.quote }}</p>
+          {%- if block.settings.by != blank -%}<footer class="cap pd__muted ed__by">{{ block.settings.by | escape }}</footer>{%- endif -%}
+        </blockquote>
+
+      {%- when 'video' -%}
+        {%- liquid
+          assign url = block.settings.video_url
+          assign file = block.settings.video
+          assign ready = false
+          if url != blank or file != blank
+            assign ready = true
+          endif
+          assign loop = false
+          if block.settings.mode == 'loop'
+            assign loop = true
+          endif
+        -%}
+        <figure class="jr__film ed__video ed__video--{{ block.settings.width }}{% unless ready %} is-soon{% endunless %}{% if loop and ready %} is-playing{% endif %} ed__block" {{ block.shopify_attributes }}>
+          <div class="jr__screen" style="aspect-ratio: {{ block.settings.ratio | default: '16 / 9' }}">
+            {%- if ready and loop -%}
+              {%- comment -%} silent loop: plays by itself, like a moving photo {%- endcomment -%}
+              {%- if url != blank and url.type == 'youtube' -%}
+                <iframe src="https://www.youtube-nocookie.com/embed/{{ url.id }}?autoplay=1&mute=1&loop=1&playlist={{ url.id }}&controls=0&rel=0&modestbranding=1&playsinline=1" title="{{ block.settings.title | escape }}" allow="autoplay; encrypted-media; picture-in-picture" loading="lazy"></iframe>
+              {%- elsif url != blank and url.type == 'vimeo' -%}
+                <iframe src="https://player.vimeo.com/video/{{ url.id }}?background=1&autoplay=1&loop=1&muted=1&dnt=1" title="{{ block.settings.title | escape }}" allow="autoplay; picture-in-picture" loading="lazy"></iframe>
+              {%- else -%}
+                {{ file | video_tag: autoplay: true, loop: true, muted: true, playsinline: true, controls: false, preload: 'metadata', image_size: '1600x' }}
+              {%- endif -%}
+            {%- else -%}
+              <div class="jr__poster">
+                {%- if block.settings.poster != blank -%}
+                  {{ block.settings.poster | image_url: width: 1800 | image_tag: alt: '', widths: '480, 800, 1200, 1800', sizes: '(max-width: 809px) 100vw, 90vw', loading: 'lazy', class: 'jr__poster-img' }}
+                {%- elsif file != blank and file.preview_image -%}
+                  {{ file.preview_image | image_url: width: 1800 | image_tag: alt: '', loading: 'lazy', class: 'jr__poster-img' }}
+                {%- endif -%}
+              </div>
+              {%- if ready -%}
+                <button class="jr__play" type="button" aria-label="Play: {{ block.settings.title | default: 'video' | escape }}"><span class="jr__play-dot"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="cap">Play</span></button>
+                <template>
+                  {%- if url != blank and url.type == 'youtube' -%}
+                    <iframe src="https://www.youtube-nocookie.com/embed/{{ url.id }}?autoplay=1&rel=0&modestbranding=1" title="{{ block.settings.title | escape }}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>
+                  {%- elsif url != blank and url.type == 'vimeo' -%}
+                    <iframe src="https://player.vimeo.com/video/{{ url.id }}?autoplay=1&dnt=1" title="{{ block.settings.title | escape }}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+                  {%- else -%}
+                    {{ file | video_tag: controls: true, autoplay: true, playsinline: true }}
+                  {%- endif -%}
+                </template>
+              {%- else -%}
+                <span class="jr__soon cap">Add a video in the theme editor</span>
+              {%- endif -%}
+            {%- endif -%}
+          </div>
+          {%- if block.settings.title != blank or block.settings.caption != blank -%}
+            <figcaption><span class="card__name">{{ block.settings.title | escape }}</span><span class="cap pd__muted">{{ block.settings.caption | escape }}</span></figcaption>
+          {%- endif -%}
+        </figure>
+
+      {%- when 'button' -%}
+        {%- if block.settings.label != blank -%}
+          <p class="ed__buttons ed__block" {{ block.shopify_attributes }}>
+            <a class="{% if block.settings.style == 'solid' %}rw__cta ed__btn{% else %}pill ed__pill{% endif %}" href="{{ block.settings.link | default: '#' }}">
+              <span>{{ block.settings.label | escape }}</span>
+              {%- if block.settings.style == 'solid' -%}<svg width="22" height="12" viewBox="0 0 26 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 7h24M19 1l6 6-6 6"/></svg>{%- endif -%}
+            </a>
+          </p>
+        {%- endif -%}
+
+    {%- endcase -%}
+  {%- endfor -%}
+</article>
+<script src="{{ 'offline-films.js' | asset_url }}" defer="defer"></script>
+
+{% schema %}
+{
+  "name": "Editorial",
+  "tag": "section",
+  "class": "ed-wrap",
+  "settings": [
+    { "type": "inline_richtext", "id": "title", "label": "Page title", "info": "Leave empty to use the page's title from Shopify admin." },
+    { "type": "text", "id": "crumb", "label": "Breadcrumb start", "default": "Drop 01" }
+  ],
+  "blocks": [
+    { "type": "heading", "name": "Heading", "settings": [
+      { "type": "text", "id": "kicker", "label": "Small line", "default": "Editorial · Drop 01" },
+      { "type": "inline_richtext", "id": "title", "label": "Headline", "default": "Go touch some grass, <em>dude.</em>" },
+      { "type": "textarea", "id": "intro", "label": "Intro" }
+    ] },
+    { "type": "text", "name": "Text", "settings": [
+      { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Write your story here.</p>" }
+    ] },
+    { "type": "page_content", "name": "Page text from admin", "limit": 1, "settings": [
+      { "type": "paragraph", "content": "Shows the text written on this page in Online Store → Pages." }
+    ] },
+    { "type": "image", "name": "Image", "settings": [
+      { "type": "image_picker", "id": "image", "label": "Image" },
+      { "type": "text", "id": "caption", "label": "Caption" },
+      { "type": "select", "id": "width", "label": "Width", "default": "wide", "options": [
+        { "value": "full", "label": "Edge to edge" }, { "value": "wide", "label": "Wide" }, { "value": "narrow", "label": "Narrow" }
+      ] }
+    ] },
+    { "type": "spread", "name": "Image + text", "settings": [
+      { "type": "image_picker", "id": "image", "label": "Image" },
+      { "type": "text", "id": "kicker", "label": "Small line", "default": "Chapter 01" },
+      { "type": "inline_richtext", "id": "heading", "label": "Heading", "default": "Do Not <em>Disturb</em>" },
+      { "type": "richtext", "id": "text", "label": "Text", "default": "<p>A few lines about this look.</p>" },
+      { "type": "text", "id": "link_label", "label": "Link text", "default": "Shop the look" },
+      { "type": "url", "id": "link", "label": "Link" },
+      { "type": "checkbox", "id": "flip", "label": "Image on the right", "default": false }
+    ] },
+    { "type": "quote", "name": "Quote", "settings": [
+      { "type": "inline_richtext", "id": "quote", "label": "Quote", "default": "“Nobody posted anything that day. <em>Everybody remembers it.</em>”" },
+      { "type": "text", "id": "by", "label": "Who said it" }
+    ] },
+    { "type": "video", "name": "Video", "settings": [
+      { "type": "video_url", "id": "video_url", "label": "YouTube or Vimeo link", "accept": ["youtube", "vimeo"] },
+      { "type": "video", "id": "video", "label": "…or upload a video", "info": "Used when there is no link above." },
+      { "type": "select", "id": "mode", "label": "How it plays", "default": "click", "options": [
+        { "value": "click", "label": "Play button (with sound)" },
+        { "value": "loop", "label": "Silent loop (plays by itself)" }
+      ] },
+      { "type": "image_picker", "id": "poster", "label": "Cover image", "info": "Shown before Play is pressed." },
+      { "type": "select", "id": "ratio", "label": "Shape", "default": "16 / 9", "options": [
+        { "value": "16 / 9", "label": "Landscape 16:9" }, { "value": "4 / 5", "label": "Portrait 4:5" }, { "value": "9 / 16", "label": "Vertical 9:16" }, { "value": "1 / 1", "label": "Square" }
+      ] },
+      { "type": "select", "id": "width", "label": "Width", "default": "wide", "options": [
+        { "value": "full", "label": "Edge to edge" }, { "value": "wide", "label": "Wide" }, { "value": "narrow", "label": "Narrow" }
+      ] },
+      { "type": "text", "id": "title", "label": "Title", "default": "Drop 01 — Go touch some grass" },
+      { "type": "text", "id": "caption", "label": "Caption", "default": "Campaign film" }
+    ] },
+    { "type": "button", "name": "Button", "settings": [
+      { "type": "text", "id": "label", "label": "Label", "default": "Shop the drop" },
+      { "type": "url", "id": "link", "label": "Link" },
+      { "type": "select", "id": "style", "label": "Style", "default": "solid", "options": [
+        { "value": "solid", "label": "Black" }, { "value": "outline", "label": "Dashed pill" }
+      ] }
+    ] }
+  ],
+  "presets": [{ "name": "Editorial", "blocks": [{ "type": "heading" }, { "type": "video" }, { "type": "text" }] }]
+}
+{% endschema %}

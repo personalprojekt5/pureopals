@@ -34,6 +34,9 @@
   <div class="rw__view" role="group" aria-label="View"><button class="rw__vbtn" type="button" data-v="ring" aria-pressed="true">Ring</button><button class="rw__vbtn" type="button" data-v="grid" aria-pressed="false">Grid</button></div>
   <div class="idx" id="index" aria-hidden="true">
     <div class="idx__top"><span class="cap">{{ section.settings.index_label | escape }}</span><button class="idx__close pill" id="idxclose" type="button">Close</button></div>
+    {%- if section.settings.index_button_label != blank and section.settings.index_button_link != blank -%}
+      <a class="rw__cta idx__cta" href="{{ section.settings.index_button_link }}"><span>{{ section.settings.index_button_label | escape }}</span><svg width="22" height="12" viewBox="0 0 26 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 7h24M19 1l6 6-6 6"/></svg></a>
+    {%- endif -%}
     <ol class="idx__list" id="idxlist"></ol>
     {%- if section.settings.menu != blank -%}
       <nav class="idx__nav" aria-label="{{ section.settings.menu.title | escape }}">
@@ -128,6 +131,8 @@
     { "type": "range", "id": "discount", "label": "Full look discount shown", "min": 0, "max": 30, "step": 5, "unit": "%", "default": 0, "info": "Only a label: create the matching automatic discount in Shopify admin → Discounts, or leave this at 0 to hide the line." },
     { "type": "header", "content": "Index sheet" },
     { "type": "text", "id": "index_label", "label": "Heading", "default": "Index · Drop 01" },
+    { "type": "text", "id": "index_button_label", "label": "Button under the looks", "default": "Editorial", "info": "A black button in the INDEX sheet. Leave empty to hide it." },
+    { "type": "url", "id": "index_button_link", "label": "Button link", "info": "e.g. your Editorial page" },
     { "type": "link_list", "id": "menu", "label": "Menu under the looks", "default": "main-menu" },
     { "type": "header", "content": "Other" },
     { "type": "text", "id": "lb_hint", "label": "View look hint", "default": "Tap a dot to shop the piece" },

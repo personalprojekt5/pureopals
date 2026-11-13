@@ -15,6 +15,8 @@ the theme editor — no code:
 | FAQ questions, size chart | Customize → FAQ page template → **FAQ** blocks |
 | Contact form messages | Sent to the store's sender email (**Settings → Notifications**) |
 | Journal stories | **Online Store → Blog posts** (blog called *Journal*) |
+| Editorial page (text, images, videos, quotes, buttons) | **Pages → Add page** *Editorial* with template **page.editorial**, then build it from blocks in Customize |
+| Button in the INDEX sheet | Customize → Home page → **Ring** → *Button under the looks* + *Button link* |
 | Films | Customize → Blog template → **Films** (YouTube / Vimeo link or uploaded video) |
 | Complete the look on product pages | **Search & Discovery** app → Product recommendations → complementary products |
 | Menus (INDEX sheet, footer, help links) | **Online Store → Navigation** |
