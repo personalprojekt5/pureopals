@@ -101,7 +101,9 @@
 .pw__form.is-ok .pw__input { color: var(--paper); }
 /* the nine looks stand in a line on the floor, slightly overlapping */
 .pw__line { position: absolute; left: 50%; bottom: 0; z-index: 1; display: flex; align-items: flex-end; transform: translateX(-50%); pointer-events: none; }
-.pw__fig { position: relative; height: min(28svh, 320px); aspect-ratio: 4 / 7; margin: 0 -2.2svh; animation: item-in 1.2s var(--ease) backwards; animation-delay: calc(.2s + var(--i) * 70ms); }
+/* the line fits however many models the landing page has (--n is set by the section) */
+.pw__line { --h: min(28svh, 320px, calc(220vw / var(--n, 9))); }
+.pw__fig { position: relative; height: var(--h); aspect-ratio: 4 / 7; margin: 0 calc(var(--h) * -.07); animation: item-in 1.2s var(--ease) backwards; animation-delay: calc(.2s + var(--i) * 70ms); }
 .pw__fig img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: 50% 100%; transform: translateY(calc(var(--foot, 0) * 100% - 4%)); }
 .pw__fig .pw__cast { left: -25%; width: 150%; object-fit: fill; }
 
@@ -133,11 +135,10 @@
   .pd__page-name { font-size: 16px; line-height: 16px; }
   .pw { padding-top: calc(var(--header-h) + 4vh); }
   .pw { min-height: 640px; }
-  .pw__fig { height: min(24svh, 220px); margin: 0 -1.8svh; }
+  .pw__line { --h: min(24svh, 220px, calc(240vw / var(--n, 9))); }
   .pw__count b { font-size: 32px; line-height: 32px; }
   .pw__count li { min-width: 64px; }
   .pw__switch { min-height: 32px; padding: 0 12px; }
-  .pw__fig:nth-child(-n + 2), .pw__fig:nth-last-child(-n + 2) { display: none; }
 }
 
 /* ---------- shared footer nav ---------- */
@@ -424,3 +425,22 @@ main:focus { outline: none; }
   .pd__media { padding: 16px 0; flex-direction: row; overflow-x: auto; scroll-snap-type: x mandatory; gap: 8px; }
   .pd__frame { flex: 0 0 100%; scroll-snap-align: start; }
 }
+
+/* landing: optional background photo (Customize → Password page → Background photo) */
+.pw__bg { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+.pw__bg img { width: 100%; height: 100%; object-fit: cover; object-position: var(--bg-pos, 50% 50%); animation: pw-bg 1.6s var(--ease) backwards; }
+.pw__bg::after { content: ""; position: absolute; inset: 0; background: var(--studio); opacity: var(--bg-veil, .35); }
+@keyframes pw-bg { from { opacity: 0; transform: scale(1.04); } }
+.pw.has-bg .pw__box { z-index: 2; }
+
+/* landing: image above the title (Customize → Password page → Image) */
+.pw__image { width: min(var(--img-w, 320px), 100%); animation: item-in 1.1s var(--ease) backwards; }
+.pw__image img { display: block; width: 100%; height: auto; max-height: 40svh; object-fit: contain; }
+
+/* landing: background video */
+.pw__bg video { display: block; width: 100%; height: 100%; object-fit: cover; object-position: var(--bg-pos, 50% 50%); animation: pw-bg 1.6s var(--ease) backwards; }
+.pw__vidbtn { position: absolute; left: 24px; bottom: 24px; z-index: 3; min-height: 32px; min-width: 72px; }
+.pw__vidbtn[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-style: solid; }
+@media (max-width: 809px) { .pw__vidbtn { left: 16px; bottom: 16px; } }
+/* over a photo or video, grey text loses contrast: use ink */
+.pw.has-bg .pw__sub, .pw.has-bg .pw__note, .pw.has-bg .pw__msg { color: var(--ink); }

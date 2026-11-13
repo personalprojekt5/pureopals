@@ -1,5 +1,24 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
-  "current": "Default",
+  "current": {
+    "logo": "shopify://shop_images/pureopalsheader2_e925f7a4-a5d1-410f-9e94-49eae43e7621.png",
+    "logo_width": 180,
+    "logo_reg": true,
+    "favicon": "shopify://shop_images/ig.png",
+    "color_studio": "#ECECEC",
+    "color_paper": "#FFFFFF",
+    "color_ink": "#000000",
+    "color_muted": "#6F6F6F",
+    "content_for_index": []
+  },
   "presets": {
     "Default": {
       "logo_width": 104,
@@ -7,8 +26,7 @@
       "color_studio": "#ECECEC",
       "color_paper": "#FFFFFF",
       "color_ink": "#000000",
-      "color_muted": "#6F6F6F",
-      "sections": {}
+      "color_muted": "#6F6F6F"
     }
   }
 }
