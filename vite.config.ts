@@ -15,6 +15,8 @@ const fromEnv = (process.env.SITE_PASSWORD || "").trim()
 // case and outer spaces do not matter when typing the password
 const PASS_HASH = createHash("sha256").update("offline:" + (fromEnv || DEFAULT_PASSWORD).toLowerCase()).digest("hex")
 const COOKIE = "offline_pass"
+// launch switch: "launched": true in src/site.json removes the gate and retires the landing page
+const LAUNCHED = !!JSON.parse(readFileSync(resolve(root, "src/site.json"), "utf8")).launched
 
 // ---------- product pages: product/<slug>/index.html from one template ----------
 type RawLook = { name: string; pieces: [string, string, number, string][] }
@@ -44,12 +46,13 @@ function gate(): Plugin {
     name: "offline-gate",
     configResolved(c) {
       base = c.base
+      if (LAUNCHED) { c.logger.info("\n[offline-gate] launched: the store is open, no password.\n"); return }
       if (!fromEnv) c.logger.warn(`\n[offline-gate] SITE_PASSWORD is not set: using the default password "${DEFAULT_PASSWORD}".\n`)
     },
     transformIndexHtml: {
       order: "pre",
       handler(html, ctx) {
-        if (ctx.filename.endsWith("password.html")) return html
+        if (LAUNCHED || ctx.filename.endsWith("password.html")) return html
         const js = `(function(){if(document.cookie.split("; ").indexOf(${JSON.stringify(COOKIE + "=" + PASS_HASH)})>-1)return;` +
           `location.replace(${JSON.stringify(base + "password.html")}+"?next="+encodeURIComponent(location.pathname+location.search+location.hash))})()`
         return html.replace("<head>", `<head>\n<script>${js}</script>`)

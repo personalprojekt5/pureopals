@@ -81,12 +81,12 @@
 
 /* ---------- password ---------- */
 .pw-page { overflow: hidden; }
-.pw { position: relative; height: 100svh; min-height: 560px; display: flex; flex-direction: column; align-items: center; padding: calc(var(--header-h) + 8vh) 24px 0; }
-.pw__box { position: relative; z-index: 2; width: min(480px, 100%); display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center; }
+.pw { position: relative; overflow: clip; height: 100svh; min-height: 720px; display: flex; flex-direction: column; align-items: center; padding: calc(var(--header-h) + 8vh) 24px 0; }
+.pw__box { position: relative; z-index: 2; width: min(800px, 100%); display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center; }
 .pw__box > .cap { margin: 0; }
 .pw__title { margin: 0; font-weight: 300; font-size: 80px; line-height: 80px; letter-spacing: -.05em; text-transform: uppercase; }
-.pw__sub { margin: 0; font-style: italic; font-weight: 300; color: var(--muted); }
-.pw__form { width: 100%; display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+.pw__sub { margin: 0; max-width: 480px; font-style: italic; font-weight: 300; color: var(--muted); }
+.pw__form { width: min(480px, 100%); display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
 .pw__label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 .pw__row { display: flex; align-items: center; gap: 8px; padding: 4px; border: 1px dashed var(--ink); border-radius: 999px; background: var(--paper); transition: border-style .3s; }
 .pw__row:focus-within { border-style: solid; }
@@ -101,7 +101,7 @@
 .pw__form.is-ok .pw__input { color: var(--paper); }
 /* the nine looks stand in a line on the floor, slightly overlapping */
 .pw__line { position: absolute; left: 50%; bottom: 0; z-index: 1; display: flex; align-items: flex-end; transform: translateX(-50%); pointer-events: none; }
-.pw__fig { position: relative; height: min(46svh, 440px); aspect-ratio: 4 / 7; margin: 0 -2.2svh; animation: item-in 1.2s var(--ease) backwards; animation-delay: calc(.2s + var(--i) * 70ms); }
+.pw__fig { position: relative; height: min(28svh, 320px); aspect-ratio: 4 / 7; margin: 0 -2.2svh; animation: item-in 1.2s var(--ease) backwards; animation-delay: calc(.2s + var(--i) * 70ms); }
 .pw__fig img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: 50% 100%; transform: translateY(calc(var(--foot, 0) * 100% - 4%)); }
 .pw__fig .pw__cast { left: -25%; width: 150%; object-fit: fill; }
 
@@ -132,7 +132,11 @@
   .pd__pager .pill { grid-row: 2; grid-column: 1 / -1; justify-self: center; }
   .pd__page-name { font-size: 16px; line-height: 16px; }
   .pw { padding-top: calc(var(--header-h) + 4vh); }
-  .pw__fig { height: min(36svh, 320px); margin: 0 -2.6svh; }
+  .pw { min-height: 640px; }
+  .pw__fig { height: min(24svh, 220px); margin: 0 -1.8svh; }
+  .pw__count b { font-size: 32px; line-height: 32px; }
+  .pw__count li { min-width: 64px; }
+  .pw__switch { min-height: 32px; padding: 0 12px; }
   .pw__fig:nth-child(-n + 2), .pw__fig:nth-last-child(-n + 2) { display: none; }
 }
 
@@ -270,3 +274,21 @@
 .pd__help a { text-decoration: underline 1px dashed; text-underline-offset: 3px; }
 .pd__help a:hover { text-decoration-style: solid; }
 .pd__pager + .pg__foot { margin-top: 0; }
+
+/* ---------- landing (password.html): email sign-up first, password behind a switch ---------- */
+.pw__form[hidden], .pw__count[hidden] { display: none; }
+.pw__switch { min-height: 32px; min-width: 96px; }
+.pw__switch[aria-current] { background: var(--ink); color: var(--paper); border-style: solid; }
+.pw__count { display: flex; gap: 8px; margin: 8px 0 0; padding: 0; list-style: none; }
+.pw__count li { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 80px; padding: 12px 8px 10px; border: 1px dashed var(--ink); border-radius: 24px; background: var(--paper); }
+.pw__count b { font-weight: 300; font-size: 40px; line-height: 40px; letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
+.pw__count .cap { color: var(--muted); }
+.pw__go--text { width: auto; padding: 0 20px; border-radius: 999px; gap: 12px; display: inline-flex; }
+.pw__trap { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); opacity: 0; pointer-events: none; }
+.pw__note { margin: 0; color: var(--muted); }
+.pw__back { align-self: center; margin-top: 4px; text-decoration: underline 1px dashed; text-underline-offset: 3px; }
+.pw__back:hover { text-decoration-style: solid; }
+#signup.is-ok .pw__row { background: var(--ink); border-style: solid; }
+#signup.is-ok .pw__input::placeholder { color: var(--paper); }
+#signup.is-ok .pw__go { background: var(--paper); color: var(--ink); }
+.pw__go:disabled { opacity: .5; cursor: progress; }
