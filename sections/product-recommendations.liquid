@@ -1,0 +1,37 @@
+{%- comment -%}
+  Rendered on request by assets/offline-product.js with ?intent=complementary (Complete the look, inside the
+  receipt) or ?intent=related (More like this, under the page). Complementary products are set per product in
+  the Shopify Search & Discovery app; related products are automatic.
+{%- endcomment -%}
+<div data-recs>
+  {%- if recommendations.performed and recommendations.products_count > 0 -%}
+    {%- if recommendations.intent == 'complementary' -%}
+      <div class="pd__look-head"><span class="cap">{{ section.settings.complementary_heading | escape }}</span></div>
+      <ul class="pd__rest" role="list">
+        {%- for p in recommendations.products -%}
+          <li><a class="rw__mini-item pd__rest-item" href="{{ p.url }}">
+            <span class="rw__mini-img">{%- if p.featured_image -%}{{ p.featured_image | image_url: width: 96, height: 96, crop: 'center' | image_tag: alt: '', width: 48, height: 48, loading: 'lazy' }}{%- endif -%}</span>
+            <span class="rw__mini-txt"><span class="rw__mini-name">{{ p.title | escape }}</span><span class="rw__mini-price">{{ p.price | money }}</span></span>
+          </a></li>
+        {%- endfor -%}
+      </ul>
+    {%- else -%}
+      <h2 class="pd__more-title">{{ section.settings.related_heading }}</h2>
+      <ul class="shop__grid is-in" role="list">
+        {%- for p in recommendations.products -%}
+          {% render 'card-product', product: p, index: forloop.index0 %}
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Recommendations",
+  "settings": [
+    { "type": "text", "id": "complementary_heading", "label": "Complete the look heading", "default": "Complete the look" },
+    { "type": "inline_richtext", "id": "related_heading", "label": "More like this heading", "default": "More <em>like this.</em>" }
+  ]
+}
+{% endschema %}

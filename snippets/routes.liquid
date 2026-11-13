@@ -1,0 +1,13 @@
+{%- comment -%} Shop routes and money format for the theme scripts (src/shopify.ts). {%- endcomment -%}
+<script>
+  window.offline = {
+    routes: {
+      root: {{ routes.root_url | json }},
+      cart: {{ routes.cart_url | json }},
+      cartAdd: {{ routes.cart_add_url | json }},
+      cartChange: {{ routes.cart_change_url | json }},
+      recommendations: {{ routes.product_recommendations_url | json }}
+    },
+    moneyFormat: {{ shop.money_format | json }}
+  };
+</script>

@@ -1,0 +1,23 @@
+{%- comment -%}
+  The shop's logo from Theme settings → Logo. Falls back to the shop name in Light caps with ®.
+  Accepts: class (string), link (boolean, default true), size ('header' | 'large')
+{%- endcomment -%}
+{%- liquid
+  assign w = settings.logo_width
+  if size == 'large'
+    assign w = settings.logo_width | times: 1.8 | round
+  endif
+  assign w2 = w | times: 2
+-%}
+{%- capture mark -%}
+  {%- if settings.logo != blank -%}
+    {{- settings.logo | image_url: width: w2 | image_tag: class: 'logo__img', alt: shop.name, width: w, loading: 'eager' -}}
+  {%- else -%}
+    {{- shop.name -}}{%- if settings.logo_reg -%}<i>®</i>{%- endif -%}
+  {%- endif -%}
+{%- endcapture -%}
+{%- if link == false -%}
+  <span class="{{ class }}{% if settings.logo != blank %} has-img{% endif %}" style="--logo-w-now: {{ w }}px">{{ mark }}</span>
+{%- else -%}
+  <a class="{{ class }}{% if settings.logo != blank %} has-img{% endif %}" href="{{ routes.root_url }}" aria-label="{{ shop.name }} home" style="--logo-w-now: {{ w }}px">{{ mark }}</a>
+{%- endif -%}

@@ -1,8 +1,13 @@
 {
-  "name": "offline-runway",
+  "name": "offline-shopify-theme",
   "private": true,
-  "version": "0.1.0",
+  "version": "1.0.0",
   "type": "module",
-  "scripts": { "dev": "vite", "build": "vite build", "preview": "vite preview" },
+  "scripts": {
+    "build": "node scripts/build-assets.mjs",
+    "typecheck": "tsc -p .",
+    "check": "npm run typecheck && npx --yes @shopify/cli@latest theme check --fail-level error",
+    "package": "npm run build && node scripts/package.mjs"
+  },
   "devDependencies": { "typescript": "5.9.3", "vite": "8.0.13" }
 }

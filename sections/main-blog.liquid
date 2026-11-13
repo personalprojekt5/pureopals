@@ -1,0 +1,61 @@
+{%- comment -%}
+  Journal = a Shopify blog (Online Store → Blog posts). Each post shows as an editorial spread, alternating sides.
+  The Films section sits under it on the same template.
+{%- endcomment -%}
+{%- paginate blog.articles by 8 -%}
+  <div class="jr">
+    <div class="shop__head">
+      <nav class="crumbs cap" aria-label="Breadcrumb"><a href="{{ routes.root_url }}">{{ section.settings.crumb | escape }}</a><span aria-hidden="true">/</span><span aria-current="page">{{ blog.title | escape }}</span></nav>
+      <h1 class="shop__title">{{ section.settings.title }}</h1>
+      <nav class="jr__jump" aria-label="On this page"><a class="pill" href="#editorial">Editorial</a><a class="pill" href="#films">Films</a></nav>
+    </div>
+    <div class="jr__story" id="editorial">
+      {%- if section.settings.lead != blank and paginate.current_page == 1 -%}
+        <header class="jr__story-head">
+          <p class="cap">{{ section.settings.kicker | escape }}</p>
+          <h2 class="jr__story-title">{{ section.settings.story_title }}</h2>
+          <p class="jr__lead">{{ section.settings.lead | escape }}</p>
+        </header>
+      {%- endif -%}
+      {%- for article in blog.articles -%}
+        <section class="jr__spread{% cycle '', ' jr__spread--flip' %}" aria-labelledby="a-{{ article.id }}">
+          <a class="jr__fig" href="{{ article.url }}" tabindex="-1" aria-hidden="true">
+            {%- if article.image -%}
+              {{ article.image | image_url: width: 1400 | image_tag: alt: '', widths: '480, 720, 1000, 1400', sizes: '(max-width: 809px) 100vw, 50vw', loading: 'lazy', class: 'jr__img' }}
+            {%- endif -%}
+          </a>
+          <div class="jr__text">
+            <p class="cap">{{ article.published_at | date: '%d.%m.%Y' }}{% if article.tags.size > 0 %} · {{ article.tags | first | escape }}{% endif %}</p>
+            <h3 class="jr__h" id="a-{{ article.id }}"><a href="{{ article.url }}">{{ article.title | escape }}</a></h3>
+            <p>{{ article.excerpt_or_content | strip_html | truncatewords: 48 }}</p>
+            <a class="cap pd__link" href="{{ article.url }}">Read</a>
+          </div>
+        </section>
+      {%- else -%}
+        <p class="shop__empty">No stories yet. Write the first one in Online Store → Blog posts.</p>
+      {%- endfor -%}
+    </div>
+    {%- if paginate.pages > 1 -%}
+      <nav class="pd__pager" aria-label="Pages">
+        {%- if paginate.previous -%}<a class="pd__page" href="{{ paginate.previous.url }}" rel="prev"><span class="cap pd__muted">Newer</span><span class="pd__page-name">Page {{ paginate.current_page | minus: 1 }}</span></a>{%- else -%}<span></span>{%- endif -%}
+        <span class="pill">{{ paginate.current_page }} / {{ paginate.pages }}</span>
+        {%- if paginate.next -%}<a class="pd__page pd__page--next" href="{{ paginate.next.url }}" rel="next"><span class="cap pd__muted">Older</span><span class="pd__page-name">Page {{ paginate.current_page | plus: 1 }}</span></a>{%- else -%}<span></span>{%- endif -%}
+      </nav>
+    {%- endif -%}
+  </div>
+{%- endpaginate -%}
+
+{% schema %}
+{
+  "name": "Journal",
+  "tag": "section",
+  "settings": [
+    { "type": "inline_richtext", "id": "title", "label": "Title", "default": "The <em>journal.</em>" },
+    { "type": "text", "id": "crumb", "label": "Breadcrumb start", "default": "Drop 01" },
+    { "type": "header", "content": "Opening" },
+    { "type": "text", "id": "kicker", "label": "Small line", "default": "Editorial · Drop 01 · Prague" },
+    { "type": "inline_richtext", "id": "story_title", "label": "Headline", "default": "Go touch some grass, <em>dude.</em>" },
+    { "type": "textarea", "id": "lead", "label": "Intro", "default": "Nine friends, one floor, no signal. We asked everyone to leave their phone at the door and keep their headphones on: wired, plugged into nothing. What was left was the clothes, and the people in them." }
+  ]
+}
+{% endschema %}

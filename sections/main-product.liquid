@@ -1,0 +1,131 @@
+{%- comment -%}
+  Product page: the photos on the left (first one sticky on desktop), a paper receipt on the right with the size
+  buttons and Add to bag. Behaviour: assets/offline-product.js (source src/product.ts).
+{%- endcomment -%}
+{%- liquid
+  assign current = product.selected_or_first_available_variant
+  assign size_index = -1
+  for option in product.options_with_values
+    assign n = option.name | downcase
+    if n contains 'size' or n contains 'größe' or n contains 'taille' or n contains 'velikost'
+      assign size_index = forloop.index0
+    endif
+  endfor
+  assign require_size = false
+  if size_index >= 0 and product.selected_variant == blank and product.variants.size > 1
+    assign require_size = true
+  endif
+-%}
+<div class="pd" data-product data-title="{{ product.title | escape }}" data-require-size="{{ require_size }}">
+  <div class="pd__top">
+    <div class="pd__media">
+      {%- if product.media.size > 0 -%}
+        {%- for media in product.media -%}
+          <figure class="pd__frame{% if forloop.first %} pd__frame--lead{% endif %}">
+            {%- case media.media_type -%}
+              {%- when 'image' -%}
+                {%- if forloop.first -%}{%- assign load = 'eager' -%}{%- else -%}{%- assign load = 'lazy' -%}{%- endif -%}
+                {{ media | image_url: width: 1600 | image_tag: alt: media.alt | default: product.title, widths: '480, 720, 960, 1200, 1600', sizes: '(max-width: 809px) 100vw, 60vw', loading: load }}
+              {%- when 'video' -%}
+                {{ media | video_tag: controls: true, playsinline: true, image_size: '1200x' }}
+              {%- when 'external_video' -%}
+                {{ media | external_video_tag }}
+              {%- else -%}
+                {{ media | media_tag }}
+            {%- endcase -%}
+          </figure>
+        {%- endfor -%}
+      {%- else -%}
+        <figure class="pd__frame pd__frame--lead">{{ 'product-apparel-1' | placeholder_svg_tag: 'pd__ph' }}</figure>
+      {%- endif -%}
+    </div>
+
+    <section class="pd__info" aria-labelledby="pdname">
+      <div class="pd__sheet">
+        <nav class="crumbs cap" aria-label="Breadcrumb">
+          <a href="{{ routes.all_products_collection_url }}">Shop all</a>
+          {%- if product.type != blank -%}
+            <span aria-hidden="true">/</span><a href="{{ routes.all_products_collection_url }}?type={{ product.type | handleize }}">{{ product.type | escape }}</a>
+          {%- endif -%}
+        </nav>
+        {%- if product.featured_image -%}
+          <div class="pd__shot">{{ product.featured_image | image_url: width: 192, height: 192, crop: 'center' | image_tag: alt: '', width: 96, height: 96 }}</div>
+        {%- endif -%}
+        {%- if section.settings.kicker != blank -%}<p class="cap pd__kick">{{ section.settings.kicker | escape }}</p>{%- endif -%}
+        <h1 class="pd__name" id="pdname">{{ product.title | escape }}</h1>
+        <p class="pd__price">
+          <span data-price>{{ current.price | money }}</span>
+          <s class="pd__compare" data-compare{% unless current.compare_at_price > current.price %} hidden{% endunless %}>{{ current.compare_at_price | money }}</s>
+        </p>
+
+        {%- form 'product', product, class: 'pd__buy', data-product-form: '', novalidate: 'novalidate' -%}
+          <input type="hidden" name="id" value="{{ current.id }}">
+          {%- unless product.has_only_default_variant -%}
+            {%- for option in product.options_with_values -%}
+              {%- assign is_size = false -%}
+              {%- if forloop.index0 == size_index -%}{%- assign is_size = true -%}{%- endif -%}
+              <div class="pd__opt" data-option data-size="{{ is_size }}" role="group" aria-labelledby="opt-{{ forloop.index }}">
+                <div class="pd__sizes-head">
+                  <span class="cap" id="opt-{{ forloop.index }}">{{ option.name | escape }}</span>
+                  {%- if is_size and section.settings.size_hint != blank -%}<span class="cap pd__muted">{{ section.settings.size_hint | escape }}</span>{%- endif -%}
+                </div>
+                <div class="rw__sizes">
+                  {%- for value in option.values -%}
+                    {%- assign pressed = false -%}
+                    {%- if option.selected_value == value -%}{%- assign pressed = true -%}{%- endif -%}
+                    <button class="rw__size" type="button" data-value="{{ value | escape }}" aria-pressed="{{ pressed }}">{{ value | escape }}</button>
+                  {%- endfor -%}
+                </div>
+              </div>
+            {%- endfor -%}
+          {%- endunless -%}
+          <p class="rw__msg" data-msg role="status" aria-live="polite">{{ form.errors | default_errors }}</p>
+          <button class="rw__cta" type="submit" name="add" data-add{% unless current.available %} disabled{% endunless %}>
+            <span data-add-label>{% if current.available %}Add to bag{% else %}Sold out{% endif %}</span>
+            <svg width="22" height="12" viewBox="0 0 26 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 7h24M19 1l6 6-6 6"/></svg>
+          </button>
+          {%- if section.settings.show_dynamic_checkout -%}{{ form | payment_button }}{%- endif -%}
+        {%- endform -%}
+
+        {%- if product.description != blank -%}
+          <details class="pd__desc"{% if section.settings.open_description %} open{% endif %}>
+            <summary class="cap">Details</summary>
+            <div class="rte">{{ product.description }}</div>
+          </details>
+        {%- endif -%}
+
+        {%- comment -%} Complete the look: Shopify's complementary products (Search & Discovery app) {%- endcomment -%}
+        <div class="pd__look" data-recs data-url="{{ routes.product_recommendations_url }}?section_id=product-recommendations&product_id={{ product.id }}&limit=3&intent=complementary"></div>
+
+        {%- if section.settings.help_menu != blank -%}
+          <nav class="pd__help cap" aria-label="Help">
+            {%- for link in section.settings.help_menu.links -%}<a href="{{ link.url }}">{{ link.title | escape }}</a>{%- endfor -%}
+          </nav>
+        {%- endif -%}
+      </div>
+    </section>
+  </div>
+  <script type="application/json" data-product-json>
+    [{%- for v in product.variants -%}{"id": {{ v.id | json }}, "options": {{ v.options | json }}, "available": {{ v.available | json }}, "price": {{ v.price | json }}, "compare_at_price": {{ v.compare_at_price | json }}}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]
+  </script>
+</div>
+
+{%- comment -%} More like this: Shopify's related products {%- endcomment -%}
+<section class="pd__more pd__more--rel" data-recs data-url="{{ routes.product_recommendations_url }}?section_id=product-recommendations&product_id={{ product.id }}&limit=4&intent=related"></section>
+
+<script src="{{ 'offline-product.js' | asset_url }}" defer="defer"></script>
+
+{% schema %}
+{
+  "name": "Product",
+  "tag": "section",
+  "class": "pd-wrap",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Line above the name", "default": "Drop 01" },
+    { "type": "text", "id": "size_hint", "label": "Size hint", "default": "Boxy fit, take your usual size" },
+    { "type": "checkbox", "id": "open_description", "label": "Show the description open", "default": false },
+    { "type": "checkbox", "id": "show_dynamic_checkout", "label": "Show Apple Pay / Shop Pay buttons", "default": false },
+    { "type": "link_list", "id": "help_menu", "label": "Help links", "info": "e.g. Shipping, Returns, Size chart, Care → your FAQ page with #shipping, #returns…" }
+  ]
+}
+{% endschema %}

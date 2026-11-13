@@ -1,0 +1,6 @@
+{
+  "type": "header",
+  "name": "Header group",
+  "sections": { "header": { "type": "header", "settings": { "show_status": true, "signal_text": "No service" } } },
+  "order": ["header"]
+}

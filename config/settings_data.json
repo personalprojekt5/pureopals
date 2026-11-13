@@ -1,0 +1,14 @@
+{
+  "current": "Default",
+  "presets": {
+    "Default": {
+      "logo_width": 104,
+      "logo_reg": true,
+      "color_studio": "#ECECEC",
+      "color_paper": "#FFFFFF",
+      "color_ink": "#000000",
+      "color_muted": "#6F6F6F",
+      "sections": {}
+    }
+  }
+}

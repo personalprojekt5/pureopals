@@ -1,0 +1,212 @@
+{
+  "sections": {
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "topic_1": {
+          "type": "topic",
+          "settings": {
+            "heading": "Shipping",
+            "short": "Shipping",
+            "anchor": "shipping"
+          }
+        },
+        "question_2": {
+          "type": "question",
+          "settings": {
+            "question": "Where do you ship from, and how fast?",
+            "answer": "<p>Every order packs and leaves Store 001 in Prague within 1–2 working days. Once it's on its way you get an email with tracking.</p>",
+            "open": true
+          }
+        },
+        "question_3": {
+          "type": "question",
+          "settings": {
+            "question": "How long until it reaches me?",
+            "answer": "<p><strong>Czech Republic</strong> — 1–2 working days · $6<br><strong>EU</strong> — 2–5 working days · $12<br><strong>UK & Switzerland</strong> — 3–6 working days · $18<br><strong>US & Canada</strong> — 4–8 working days · $24<br><strong>Rest of world</strong> — 6–12 working days · $30</p><p>Shipping is free on orders over $200, everywhere.</p>",
+            "open": false
+          }
+        },
+        "question_4": {
+          "type": "question",
+          "settings": {
+            "question": "Will I pay customs or import duties?",
+            "answer": "<p>Inside the EU, no. Outside the EU, duties and taxes may be charged by your country when the parcel arrives. They're set by your local customs office, not by us.</p>",
+            "open": false
+          }
+        },
+        "question_5": {
+          "type": "question",
+          "settings": {
+            "question": "My tracking hasn't moved in days.",
+            "answer": "<p>Parcels sometimes go quiet between hubs. If nothing has changed for 5 working days, write to us with your order number through the form below and we'll chase it.</p>",
+            "open": false
+          }
+        },
+        "topic_6": {
+          "type": "topic",
+          "settings": {
+            "heading": "Returns & exchanges",
+            "short": "Returns",
+            "anchor": "returns"
+          }
+        },
+        "question_7": {
+          "type": "question",
+          "settings": {
+            "question": "Can I return something?",
+            "answer": "<p>Yes, within 30 days of delivery. Pieces need to be unworn, unwashed and still have their tags. Write to us with your order number and we'll send a return label.</p>",
+            "open": false
+          }
+        },
+        "question_8": {
+          "type": "question",
+          "settings": {
+            "question": "How do exchanges work?",
+            "answer": "<p>Wrong size? Tell us which size you want instead. We hold it for you and ship it as soon as your return is scanned by the courier, so you're not waiting twice.</p>",
+            "open": false
+          }
+        },
+        "question_9": {
+          "type": "question",
+          "settings": {
+            "question": "When do I get my money back?",
+            "answer": "<p>Within 5 working days of your return reaching Prague, to the payment method you used. Original shipping costs aren't refunded.</p>",
+            "open": false
+          }
+        },
+        "topic_10": {
+          "type": "topic",
+          "settings": {
+            "heading": "Sizing & fit",
+            "short": "Sizing",
+            "anchor": "sizing"
+          }
+        },
+        "question_11": {
+          "type": "question",
+          "settings": {
+            "question": "How do the pieces fit?",
+            "answer": "<p>Tops and outerwear are cut boxy and a little cropped. Take your usual size for the look you see on the ring, or go one down for a closer fit. Trousers sit on the waist with a wide, straight leg.</p>",
+            "open": false
+          }
+        },
+        "chart_12": {
+          "type": "chart",
+          "settings": {
+            "question": "Size chart",
+            "caption": "Tops & outerwear, body measurements in cm",
+            "rows": " | S | M | L | XL\nChest | 88–94 | 94–100 | 100–106 | 106–112\nWaist | 72–78 | 78–84 | 84–90 | 90–96\nHeight | 165–172 | 172–180 | 180–188 | 186–194",
+            "note": "<p>Shoes come in EU sizes 40–45 and run true to size.</p>"
+          }
+        },
+        "question_13": {
+          "type": "question",
+          "settings": {
+            "question": "What are the models wearing?",
+            "answer": "<p>Every model on the ring wears size M, and EU 42 or 43 in shoes.</p>",
+            "open": false
+          }
+        },
+        "topic_14": {
+          "type": "topic",
+          "settings": {
+            "heading": "Materials & care",
+            "short": "Care",
+            "anchor": "care"
+          }
+        },
+        "question_15": {
+          "type": "question",
+          "settings": {
+            "question": "What are the pieces made of?",
+            "answer": "<p>Mostly cotton jersey, denim, corduroy and wool knits, with nylon for the outerwear and track pieces. The full composition is printed on the label inside each piece.</p>",
+            "open": false
+          }
+        },
+        "question_16": {
+          "type": "question",
+          "settings": {
+            "question": "How do I wash them?",
+            "answer": "<p>Cold wash, inside out, with similar colours. Skip the tumble dryer: hang it and go outside while it dries. Knits: hand wash and dry flat. Leather and suede: wipe clean, don't wash.</p>",
+            "open": false
+          }
+        },
+        "question_17": {
+          "type": "question",
+          "settings": {
+            "question": "Washed pieces look different from each other.",
+            "answer": "<p>That's on purpose. Washed, faded and dirty-wash pieces are dyed and finished one batch at a time, so yours will be slightly its own.</p>",
+            "open": false
+          }
+        },
+        "topic_18": {
+          "type": "topic",
+          "settings": {
+            "heading": "Orders & payment",
+            "short": "Orders",
+            "anchor": "orders"
+          }
+        },
+        "question_19": {
+          "type": "question",
+          "settings": {
+            "question": "How can I pay?",
+            "answer": "<p>Visa, Mastercard, American Express, Apple Pay and Google Pay. Prices are in US dollars; your bank converts at checkout.</p>",
+            "open": false
+          }
+        },
+        "question_20": {
+          "type": "question",
+          "settings": {
+            "question": "Can I change or cancel my order?",
+            "answer": "<p>Yes, as long as it hasn't left Prague. Write to us as soon as you can with your order number.</p>",
+            "open": false
+          }
+        }
+      },
+      "block_order": [
+        "topic_1",
+        "question_2",
+        "question_3",
+        "question_4",
+        "question_5",
+        "topic_6",
+        "question_7",
+        "question_8",
+        "question_9",
+        "topic_10",
+        "question_11",
+        "chart_12",
+        "question_13",
+        "topic_14",
+        "question_15",
+        "question_16",
+        "question_17",
+        "topic_18",
+        "question_19",
+        "question_20"
+      ],
+      "settings": {
+        "title": "Good to <em>know.</em>",
+        "sub": "Shipping · Returns · Sizing · Care · Orders",
+        "crumb": "Drop 01",
+        "contact_link": true
+      }
+    },
+    "contact": {
+      "type": "contact-form",
+      "settings": {
+        "kicker": "06 · Contact",
+        "title": "Still <em>stuck?</em>",
+        "sub": "Write to us. A real person answers within two working days, usually from a park.",
+        "topics": "Order, Shipping, Returns, Sizing, Other",
+        "success": "Message sent. We'll answer within two working days. Now go outside."
+      }
+    }
+  },
+  "order": [
+    "faq",
+    "contact"
+  ]
+}

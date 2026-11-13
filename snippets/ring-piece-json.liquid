@@ -1,0 +1,5 @@
+{%- comment -%} One product as JSON for the ring (src/ring.ts → ShopProduct). Accepts: p (product) {%- endcomment -%}
+{"title": {{ p.title | json }}, "type": {{ p.type | json }}, "url": {{ p.url | json }},
+ "img": {% if p.featured_image %}{{ p.featured_image | image_url: width: 192, height: 192, crop: 'center' | json }}{% else %}""{% endif %},
+ "price": {{ p.price | json }}, "available": {{ p.available | json }}, "options": {{ p.options | json }},
+ "variants": [{%- for v in p.variants -%}{"id": {{ v.id | json }}, "title": {{ v.title | json }}, "options": {{ v.options | json }}, "available": {{ v.available | json }}, "price": {{ v.price | json }}}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]}

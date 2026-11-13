@@ -1,0 +1,62 @@
+{%- comment -%}
+  Shop all (/collections/all) and every other collection: title, type filter pills, the grid of cards.
+  Filtering: assets/offline-collection.js (source src/collection.ts).
+{%- endcomment -%}
+{%- paginate collection.products by section.settings.per_page -%}
+  <div class="shop" data-collection>
+    <div class="shop__head">
+      <nav class="crumbs cap" aria-label="Breadcrumb"><a href="{{ routes.root_url }}">{{ section.settings.crumb | escape }}</a><span aria-hidden="true">/</span><span aria-current="page">{{ collection.title | escape }}</span></nav>
+      <h1 class="shop__title">
+        {%- if collection.handle == 'all' and section.settings.all_title != blank -%}{{ section.settings.all_title }}{%- else -%}{{ collection.title | escape }}{%- endif -%}
+      </h1>
+      <p class="shop__sub cap"><span data-count-label>{{ collection.products_count }} {{ collection.products_count | pluralize: 'piece', 'pieces' }}</span></p>
+      {%- if collection.description != blank -%}<div class="shop__desc rte">{{ collection.description }}</div>{%- endif -%}
+    </div>
+
+    {%- if section.settings.show_filters and collection.all_types.size > 1 -%}
+      <div class="shop__filters" role="group" aria-label="Filter by type" data-filters>
+        <button class="pill shop__filter" type="button" data-type="all" aria-pressed="true">All <span class="shop__n">{{ paginate.items }}</span></button>
+        {%- for type in collection.all_types -%}
+          {%- if type != blank -%}
+            {%- assign n = 0 -%}
+            {%- for p in collection.products -%}{%- if p.type == type -%}{%- assign n = n | plus: 1 -%}{%- endif -%}{%- endfor -%}
+            <button class="pill shop__filter" type="button" data-type="{{ type | handleize }}" aria-pressed="false">{{ type | escape }} <span class="shop__n">{{ n }}</span></button>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- if collection.products.size > 0 -%}
+      <ul class="shop__grid is-in" role="list" data-grid>
+        {%- for product in collection.products -%}
+          {%- assign eager = false -%}{%- if forloop.index <= 8 -%}{%- assign eager = true -%}{%- endif -%}
+          {% render 'card-product', product: product, index: forloop.index0, eager: eager %}
+        {%- endfor -%}
+      </ul>
+    {%- else -%}
+      <p class="shop__empty">Nothing here yet. Go outside, come back later.</p>
+    {%- endif -%}
+
+    {%- if paginate.pages > 1 -%}
+      <nav class="pd__pager" aria-label="Pages">
+        {%- if paginate.previous -%}<a class="pd__page" href="{{ paginate.previous.url }}" rel="prev"><span class="cap pd__muted">Previous</span><span class="pd__page-name">Page {{ paginate.current_page | minus: 1 }}</span></a>{%- else -%}<span></span>{%- endif -%}
+        <span class="pill">{{ paginate.current_page }} / {{ paginate.pages }}</span>
+        {%- if paginate.next -%}<a class="pd__page pd__page--next" href="{{ paginate.next.url }}" rel="next"><span class="cap pd__muted">Next</span><span class="pd__page-name">Page {{ paginate.current_page | plus: 1 }}</span></a>{%- else -%}<span></span>{%- endif -%}
+      </nav>
+    {%- endif -%}
+  </div>
+{%- endpaginate -%}
+<script src="{{ 'offline-collection.js' | asset_url }}" defer="defer"></script>
+
+{% schema %}
+{
+  "name": "Collection",
+  "tag": "section",
+  "settings": [
+    { "type": "inline_richtext", "id": "all_title", "label": "Title on Shop all", "default": "All <em>pieces.</em>" },
+    { "type": "text", "id": "crumb", "label": "Breadcrumb start", "default": "Drop 01" },
+    { "type": "checkbox", "id": "show_filters", "label": "Show type filters", "default": true },
+    { "type": "range", "id": "per_page", "label": "Products per page", "min": 12, "max": 48, "step": 4, "default": 48 }
+  ]
+}
+{% endschema %}

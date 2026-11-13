@@ -1,0 +1,164 @@
+{%- comment -%}
+  The ring: nine looks (one block each) stand on a circle seen from slightly above. Drag / trackpad / arrows turn
+  it, the front model opens into View look with dots on the pieces and a receipt to add them to the Shopify cart.
+  Behaviour: assets/offline-ring.js (source src/ring.ts). Each block picks a model cut-out (tall transparent
+  PNG/WebP, 4:7, feet at the bottom), an optional floor shadow (1.5x as wide) and up to three products.
+{%- endcomment -%}
+{%- if section.blocks.size == 0 -%}
+  <div class="rw rw--empty"><p class="cap">Add looks to the ring: Customize → Ring → Add look.</p></div>
+{%- else -%}
+<section class="rw" data-section="hero" aria-labelledby="rw-title">
+  <div class="rw__head">
+    <h1 class="rw__title" id="rw-title">{{ section.settings.title }}</h1>
+    <p class="rw__sub">{{ section.settings.subtitle | escape }}</p>
+  </div>
+  <div class="rw__stage" id="stage" tabindex="0" role="region" aria-roledescription="carousel" aria-label="Looks — arrow keys turn the ring, Enter opens the look">
+    <div class="rw__bodies" id="bodies"></div>
+    <div class="rw__gcaps" id="gcaps" aria-hidden="true"></div>
+    <span class="rw__sweep" aria-hidden="true"></span>
+    <span class="rw__cursor" id="cursor" aria-hidden="true"><span class="rw__cursor-in"><b class="c-drag">Drag</b><b class="c-view">View</b></span></span>
+    <span class="rw__live" id="live" aria-live="polite"></span>
+  </div>
+  <div class="rw__controls">
+    <div class="rw__now" id="now">
+      <span class="rw__now-top"><span class="cap"><span id="nowi">01</span> / <span id="nowt">{{ section.blocks.size | prepend: "0" | slice: -2, 2 }}</span></span><button class="rw__auto" id="auto" type="button" aria-pressed="true" aria-label="Autoplay"><svg class="i-pause" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.5 4.5h3.5v15H6.5zM14 4.5h3.5v15H14z"/></svg><svg class="i-play" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5z"/></svg></button></span>
+      <span class="rw__now-name" id="nown">{{ section.blocks.first.settings.name | escape }}</span>
+    </div>
+    <ul class="rw__mini" id="mini" aria-label="Pieces in this look"></ul>
+    <button class="rw__plus" id="plus" type="button" aria-label="Shop the look"><span class="cap">Shop the look</span><span class="rw__plus-dot"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></span></button>
+  </div>
+  {%- if section.settings.show_qr -%}
+  <a class="rw__qr" href="https://filatov.design" aria-label="Made by filatov.design"><svg viewBox="0 0 25 25" width="56" height="56" shape-rendering="crispEdges" aria-hidden="true"><path fill="currentColor" d="M0 0h1v1h-1zM1 0h1v1h-1zM2 0h1v1h-1zM3 0h1v1h-1zM4 0h1v1h-1zM5 0h1v1h-1zM6 0h1v1h-1zM8 0h1v1h-1zM9 0h1v1h-1zM11 0h1v1h-1zM13 0h1v1h-1zM14 0h1v1h-1zM15 0h1v1h-1zM16 0h1v1h-1zM18 0h1v1h-1zM19 0h1v1h-1zM20 0h1v1h-1zM21 0h1v1h-1zM22 0h1v1h-1zM23 0h1v1h-1zM24 0h1v1h-1zM0 1h1v1h-1zM6 1h1v1h-1zM9 1h1v1h-1zM13 1h1v1h-1zM18 1h1v1h-1zM24 1h1v1h-1zM0 2h1v1h-1zM2 2h1v1h-1zM3 2h1v1h-1zM4 2h1v1h-1zM6 2h1v1h-1zM10 2h1v1h-1zM14 2h1v1h-1zM15 2h1v1h-1zM18 2h1v1h-1zM20 2h1v1h-1zM21 2h1v1h-1zM22 2h1v1h-1zM24 2h1v1h-1zM0 3h1v1h-1zM2 3h1v1h-1zM3 3h1v1h-1zM4 3h1v1h-1zM6 3h1v1h-1zM8 3h1v1h-1zM9 3h1v1h-1zM13 3h1v1h-1zM14 3h1v1h-1zM15 3h1v1h-1zM16 3h1v1h-1zM18 3h1v1h-1zM20 3h1v1h-1zM21 3h1v1h-1zM22 3h1v1h-1zM24 3h1v1h-1zM0 4h1v1h-1zM2 4h1v1h-1zM3 4h1v1h-1zM4 4h1v1h-1zM6 4h1v1h-1zM8 4h1v1h-1zM9 4h1v1h-1zM11 4h1v1h-1zM13 4h1v1h-1zM15 4h1v1h-1zM16 4h1v1h-1zM18 4h1v1h-1zM20 4h1v1h-1zM21 4h1v1h-1zM22 4h1v1h-1zM24 4h1v1h-1zM0 5h1v1h-1zM6 5h1v1h-1zM8 5h1v1h-1zM9 5h1v1h-1zM10 5h1v1h-1zM11 5h1v1h-1zM14 5h1v1h-1zM18 5h1v1h-1zM24 5h1v1h-1zM0 6h1v1h-1zM1 6h1v1h-1zM2 6h1v1h-1zM3 6h1v1h-1zM4 6h1v1h-1zM5 6h1v1h-1zM6 6h1v1h-1zM8 6h1v1h-1zM10 6h1v1h-1zM12 6h1v1h-1zM14 6h1v1h-1zM16 6h1v1h-1zM18 6h1v1h-1zM19 6h1v1h-1zM20 6h1v1h-1zM21 6h1v1h-1zM22 6h1v1h-1zM23 6h1v1h-1zM24 6h1v1h-1zM8 7h1v1h-1zM9 7h1v1h-1zM14 7h1v1h-1zM0 8h1v1h-1zM4 8h1v1h-1zM6 8h1v1h-1zM7 8h1v1h-1zM8 8h1v1h-1zM9 8h1v1h-1zM10 8h1v1h-1zM15 8h1v1h-1zM17 8h1v1h-1zM18 8h1v1h-1zM19 8h1v1h-1zM20 8h1v1h-1zM21 8h1v1h-1zM24 8h1v1h-1zM0 9h1v1h-1zM2 9h1v1h-1zM4 9h1v1h-1zM5 9h1v1h-1zM7 9h1v1h-1zM11 9h1v1h-1zM14 9h1v1h-1zM15 9h1v1h-1zM20 9h1v1h-1zM21 9h1v1h-1zM23 9h1v1h-1zM2 10h1v1h-1zM5 10h1v1h-1zM6 10h1v1h-1zM9 10h1v1h-1zM10 10h1v1h-1zM15 10h1v1h-1zM16 10h1v1h-1zM17 10h1v1h-1zM18 10h1v1h-1zM20 10h1v1h-1zM21 10h1v1h-1zM22 10h1v1h-1zM0 11h1v1h-1zM7 11h1v1h-1zM10 11h1v1h-1zM12 11h1v1h-1zM14 11h1v1h-1zM19 11h1v1h-1zM22 11h1v1h-1zM23 11h1v1h-1zM2 12h1v1h-1zM3 12h1v1h-1zM4 12h1v1h-1zM6 12h1v1h-1zM9 12h1v1h-1zM10 12h1v1h-1zM11 12h1v1h-1zM16 12h1v1h-1zM17 12h1v1h-1zM18 12h1v1h-1zM19 12h1v1h-1zM21 12h1v1h-1zM22 12h1v1h-1zM23 12h1v1h-1zM24 12h1v1h-1zM0 13h1v1h-1zM1 13h1v1h-1zM4 13h1v1h-1zM10 13h1v1h-1zM12 13h1v1h-1zM13 13h1v1h-1zM14 13h1v1h-1zM15 13h1v1h-1zM16 13h1v1h-1zM20 13h1v1h-1zM23 13h1v1h-1zM3 14h1v1h-1zM6 14h1v1h-1zM7 14h1v1h-1zM10 14h1v1h-1zM11 14h1v1h-1zM12 14h1v1h-1zM13 14h1v1h-1zM14 14h1v1h-1zM15 14h1v1h-1zM18 14h1v1h-1zM19 14h1v1h-1zM20 14h1v1h-1zM21 14h1v1h-1zM22 14h1v1h-1zM4 15h1v1h-1zM7 15h1v1h-1zM8 15h1v1h-1zM9 15h1v1h-1zM10 15h1v1h-1zM11 15h1v1h-1zM14 15h1v1h-1zM17 15h1v1h-1zM19 15h1v1h-1zM20 15h1v1h-1zM22 15h1v1h-1zM23 15h1v1h-1zM0 16h1v1h-1zM1 16h1v1h-1zM2 16h1v1h-1zM6 16h1v1h-1zM7 16h1v1h-1zM9 16h1v1h-1zM12 16h1v1h-1zM15 16h1v1h-1zM16 16h1v1h-1zM17 16h1v1h-1zM18 16h1v1h-1zM19 16h1v1h-1zM20 16h1v1h-1zM21 16h1v1h-1zM22 16h1v1h-1zM8 17h1v1h-1zM14 17h1v1h-1zM16 17h1v1h-1zM20 17h1v1h-1zM0 18h1v1h-1zM1 18h1v1h-1zM2 18h1v1h-1zM3 18h1v1h-1zM4 18h1v1h-1zM5 18h1v1h-1zM6 18h1v1h-1zM8 18h1v1h-1zM9 18h1v1h-1zM13 18h1v1h-1zM14 18h1v1h-1zM16 18h1v1h-1zM18 18h1v1h-1zM20 18h1v1h-1zM0 19h1v1h-1zM6 19h1v1h-1zM12 19h1v1h-1zM16 19h1v1h-1zM20 19h1v1h-1zM21 19h1v1h-1zM22 19h1v1h-1zM23 19h1v1h-1zM24 19h1v1h-1zM0 20h1v1h-1zM2 20h1v1h-1zM3 20h1v1h-1zM4 20h1v1h-1zM6 20h1v1h-1zM8 20h1v1h-1zM9 20h1v1h-1zM11 20h1v1h-1zM13 20h1v1h-1zM14 20h1v1h-1zM16 20h1v1h-1zM17 20h1v1h-1zM18 20h1v1h-1zM19 20h1v1h-1zM20 20h1v1h-1zM21 20h1v1h-1zM22 20h1v1h-1zM23 20h1v1h-1zM24 20h1v1h-1zM0 21h1v1h-1zM2 21h1v1h-1zM3 21h1v1h-1zM4 21h1v1h-1zM6 21h1v1h-1zM9 21h1v1h-1zM12 21h1v1h-1zM14 21h1v1h-1zM17 21h1v1h-1zM18 21h1v1h-1zM19 21h1v1h-1zM22 21h1v1h-1zM23 21h1v1h-1zM24 21h1v1h-1zM0 22h1v1h-1zM2 22h1v1h-1zM3 22h1v1h-1zM4 22h1v1h-1zM6 22h1v1h-1zM9 22h1v1h-1zM11 22h1v1h-1zM12 22h1v1h-1zM13 22h1v1h-1zM14 22h1v1h-1zM16 22h1v1h-1zM17 22h1v1h-1zM18 22h1v1h-1zM21 22h1v1h-1zM23 22h1v1h-1zM0 23h1v1h-1zM6 23h1v1h-1zM11 23h1v1h-1zM13 23h1v1h-1zM17 23h1v1h-1zM19 23h1v1h-1zM20 23h1v1h-1zM21 23h1v1h-1zM22 23h1v1h-1zM23 23h1v1h-1zM0 24h1v1h-1zM1 24h1v1h-1zM2 24h1v1h-1zM3 24h1v1h-1zM4 24h1v1h-1zM5 24h1v1h-1zM6 24h1v1h-1zM8 24h1v1h-1zM9 24h1v1h-1zM10 24h1v1h-1zM12 24h1v1h-1zM13 24h1v1h-1zM15 24h1v1h-1zM17 24h1v1h-1zM18 24h1v1h-1zM22 24h1v1h-1zM23 24h1v1h-1zM24 24h1v1h-1z"/></svg></a>
+  {%- endif -%}
+  <button class="rw__indexbtn pill" id="indexbtn" type="button" aria-expanded="false" aria-controls="index">Index</button>
+  <div class="rw__view" role="group" aria-label="View"><button class="rw__vbtn" type="button" data-v="ring" aria-pressed="true">Ring</button><button class="rw__vbtn" type="button" data-v="grid" aria-pressed="false">Grid</button></div>
+  <div class="idx" id="index" aria-hidden="true">
+    <div class="idx__top"><span class="cap">{{ section.settings.index_label | escape }}</span><button class="idx__close pill" id="idxclose" type="button">Close</button></div>
+    <ol class="idx__list" id="idxlist"></ol>
+    {%- if section.settings.menu != blank -%}
+      <nav class="idx__nav" aria-label="{{ section.settings.menu.title | escape }}">
+        {%- for link in section.settings.menu.links -%}<a class="pill" href="{{ link.url }}">{{ link.title | escape }}</a>{%- endfor -%}
+      </nav>
+    {%- endif -%}
+  </div>
+  <div class="rw__lb" id="lb" aria-hidden="true">
+    <div class="rw__lb-stage" id="lbstage"></div>
+    <div class="rw__lb-top">
+      <p class="rw__lb-cap"><span id="lbkick">01.</span><i id="lbname"></i></p>
+      <button class="rw__lb-close" id="lbclose" type="button" aria-label="Close look"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+    </div>
+    <p class="rw__lb-hint cap">{{ section.settings.lb_hint | escape }}</p>
+  </div>
+  <aside class="rw__receipt" id="receipt" aria-label="In this look" aria-hidden="true">
+    <div class="rcpt-head">
+      {% render 'logo', class: 'rcpt-logo', link: false, size: 'large' %}
+      <span class="cap">{{ section.settings.receipt_line | escape }}</span>
+      <span class="cap" id="rlook">Look 01 — {{ section.blocks.first.settings.name | escape }}</span>
+    </div>
+    <ul class="rw__items" id="items" role="list"></ul>
+    <div class="rw__bundle">
+      <p class="rw__msg" id="msg" role="status" aria-live="polite"></p>
+      <dl class="rcpt-sum">
+        <div><dt class="cap">Subtotal</dt><dd class="cap" id="rsub">$0</dd></div>
+        <div{% if section.settings.discount == 0 %} hidden{% endif %}><dt class="cap">Full look −{{ section.settings.discount }}%</dt><dd class="cap" id="rdisc">$0</dd></div>
+        <div class="rcpt-total"><dt>Total</dt><dd id="rtot">$0</dd></div>
+      </dl>
+      <button class="rw__cta" id="cta" type="button"><span class="t-add">Add full look to bag</span><span class="t-done">Full look in your bag</span><svg width="22" height="12" viewBox="0 0 26 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 7h24M19 1l6 6-6 6"/></svg></button>
+    </div>
+    <div class="rcpt-foot" aria-hidden="true"><span class="rcpt-bar"></span><span class="cap">{{ section.settings.receipt_thanks | escape }}</span></div>
+  </aside>
+</section>
+<script type="application/json" data-ring-data>
+{"discount": {{ section.settings.discount | json }}, "looks": [
+{%- for block in section.blocks -%}
+  {%- liquid
+    if block.settings.model != blank
+      assign img = block.settings.model | image_url: width: 914
+      assign small = block.settings.model | image_url: width: 571
+    else
+      assign img = block.settings.model_url
+      assign small = block.settings.model_url
+    endif
+    if block.settings.shadow != blank
+      assign shadow = block.settings.shadow | image_url: width: 685
+    else
+      assign shadow = block.settings.shadow_url
+    endif
+  -%}
+  {"name": {{ block.settings.name | json }}, "foot": {{ block.settings.foot | divided_by: 1000.0 | json }}, "img": {{ img | json }}, "small": {{ small | json }}, "shadow": {{ shadow | json }},
+   "pins": [
+    {%- assign first = true -%}
+    {%- for k in (1..3) -%}
+      {%- capture pk %}product_{{ k }}{% endcapture -%}
+      {%- capture xk %}pin_{{ k }}_x{% endcapture -%}
+      {%- capture yk %}pin_{{ k }}_y{% endcapture -%}
+      {%- if block.settings[pk] != blank -%}
+        {%- unless first %},{% endunless -%}{%- assign first = false -%}
+        [{{ block.settings[xk] | json }}, {{ block.settings[yk] | json }}]
+      {%- endif -%}
+    {%- endfor -%}],
+   "pieces": [
+    {%- assign first = true -%}
+    {%- for k in (1..3) -%}
+      {%- capture pk %}product_{{ k }}{% endcapture -%}
+      {%- if block.settings[pk] != blank -%}
+        {%- unless first %},{% endunless -%}{%- assign first = false -%}
+        {% render 'ring-piece-json', p: block.settings[pk] %}
+      {%- endif -%}
+    {%- endfor -%}]
+  }{% unless forloop.last %},{% endunless %}
+{%- endfor -%}
+]}
+</script>
+<script src="{{ 'offline-ring.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Ring",
+  "tag": "div",
+  "class": "ring-wrap",
+  "max_blocks": 12,
+  "settings": [
+    { "type": "inline_richtext", "id": "title", "label": "Page title (for search engines and screen readers)", "default": "Go touch some grass, <em>dude.</em>" },
+    { "type": "text", "id": "subtitle", "label": "Description (for search engines and screen readers)", "default": "Drop 01. Nine looks for logging off. Drag the ring, pick a look, tap a dot to shop the piece." },
+    { "type": "header", "content": "Receipt" },
+    { "type": "text", "id": "receipt_line", "label": "Line under the logo", "default": "Drop 01 · Store 001 · Prague" },
+    { "type": "text", "id": "receipt_thanks", "label": "Sign-off under the barcode", "default": "Thank you for logging off" },
+    { "type": "range", "id": "discount", "label": "Full look discount shown", "min": 0, "max": 30, "step": 5, "unit": "%", "default": 0, "info": "Only a label: create the matching automatic discount in Shopify admin → Discounts, or leave this at 0 to hide the line." },
+    { "type": "header", "content": "Index sheet" },
+    { "type": "text", "id": "index_label", "label": "Heading", "default": "Index · Drop 01" },
+    { "type": "link_list", "id": "menu", "label": "Menu under the looks", "default": "main-menu" },
+    { "type": "header", "content": "Other" },
+    { "type": "text", "id": "lb_hint", "label": "View look hint", "default": "Tap a dot to shop the piece" },
+    { "type": "checkbox", "id": "show_qr", "label": "Show the filatov.design QR code", "default": true }
+  ],
+  "blocks": [
+    {
+      "type": "look",
+      "name": "Look",
+      "settings": [
+        { "type": "text", "id": "name", "label": "Name", "default": "New look" },
+        { "type": "image_picker", "id": "model", "label": "Model cut-out", "info": "Transparent PNG or WebP, portrait 4:7 (e.g. 914 × 1600), feet near the bottom edge." },
+        { "type": "text", "id": "model_url", "label": "…or model image URL", "info": "Used only when no image is uploaded above." },
+        { "type": "image_picker", "id": "shadow", "label": "Floor shadow", "info": "Optional. Transparent, 1.5x as wide as the cut-out, same feet line." },
+        { "type": "text", "id": "shadow_url", "label": "…or shadow image URL" },
+        { "type": "range", "id": "foot", "label": "Empty space under the feet", "min": 0, "max": 100, "step": 1, "unit": "‰", "default": 40, "info": "Thousandths of the image height below the soles. Raise it if the model floats, lower it if the feet are cut off." },
+        { "type": "header", "content": "Piece 01" },
+        { "type": "product", "id": "product_1", "label": "Product" },
+        { "type": "range", "id": "pin_1_x", "label": "Dot across", "min": 0, "max": 100, "step": 1, "unit": "%", "default": 70 },
+        { "type": "range", "id": "pin_1_y", "label": "Dot down", "min": 0, "max": 100, "step": 1, "unit": "%", "default": 34 },
+        { "type": "header", "content": "Piece 02" },
+        { "type": "product", "id": "product_2", "label": "Product" },
+        { "type": "range", "id": "pin_2_x", "label": "Dot across", "min": 0, "max": 100, "step": 1, "unit": "%", "default": 40 },
+        { "type": "range", "id": "pin_2_y", "label": "Dot down", "min": 0, "max": 100, "step": 1, "unit": "%", "default": 66 },
+        { "type": "header", "content": "Piece 03" },
+        { "type": "product", "id": "product_3", "label": "Product" },
+        { "type": "range", "id": "pin_3_x", "label": "Dot across", "min": 0, "max": 100, "step": 1, "unit": "%", "default": 40 },
+        { "type": "range", "id": "pin_3_y", "label": "Dot down", "min": 0, "max": 100, "step": 1, "unit": "%", "default": 88 }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Ring", "blocks": [{ "type": "look" }, { "type": "look" }, { "type": "look" }] }]
+}
+{% endschema %}

@@ -1,0 +1,24 @@
+{%- comment -%} Footer on every page except the home page (the ring fills exactly one screen). {%- endcomment -%}
+{%- unless template.name == 'index' -%}
+  <footer class="pg__foot site-foot">
+    {%- if section.settings.menu != blank -%}
+      <nav class="pg__nav" aria-label="{{ section.settings.menu.title | escape }}">
+        {%- for link in section.settings.menu.links -%}
+          <a class="pill" href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
+        {%- endfor -%}
+      </nav>
+    {%- endif -%}
+    <span class="cap">{{ section.settings.text | escape }}</span>
+  </footer>
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "Footer",
+  "class": "footer-wrap",
+  "settings": [
+    { "type": "link_list", "id": "menu", "label": "Menu", "default": "footer", "info": "Pill links. Suggested: The ring, Shop all, Journal, FAQ." },
+    { "type": "text", "id": "text", "label": "Sign-off", "default": "Thank you for logging off" }
+  ]
+}
+{% endschema %}

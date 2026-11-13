@@ -1,0 +1,196 @@
+{
+  "sections": {
+    "ring": {
+      "type": "ring",
+      "blocks": {
+        "look_1": {
+          "type": "look",
+          "settings": {
+            "name": "Do Not Disturb",
+            "model_url": "https://demo.filatov.design/kit/dfadfe5e0f2b1a44/v3/images/look-1.webp",
+            "shadow_url": "https://demo.filatov.design/kit/dfadfe5e0f2b1a44/v3/images/shadow-1.webp",
+            "foot": 41,
+            "product_1": "washed-boxy-tee",
+            "pin_1_x": 74,
+            "pin_1_y": 32,
+            "product_2": "ringer-long-sleeve",
+            "pin_2_x": 30,
+            "pin_2_y": 47,
+            "product_3": "studded-belt",
+            "pin_3_x": 50,
+            "pin_3_y": 57
+          }
+        },
+        "look_2": {
+          "type": "look",
+          "settings": {
+            "name": "Shuffle",
+            "model_url": "https://demo.filatov.design/kit/dfadfe5e0f2b1a44/v3/images/look-2.webp",
+            "shadow_url": "https://demo.filatov.design/kit/dfadfe5e0f2b1a44/v3/images/shadow-2.webp",
+            "foot": 95,
+            "product_1": "nylon-harrington",
+            "pin_1_x": 80,
+            "pin_1_y": 35,
+            "product_2": "track-trousers",
+            "pin_2_x": 41,
+            "pin_2_y": 67,
+            "product_3": "silver-runners",
+            "pin_3_x": 38,
+            "pin_3_y": 85
+          }
+        },
+        "look_3": {
+          "type": "look",
+          "settings": {
+            "name": "Repeat One",
+            "model_url": "https://demo.filatov.design/kit/dfadfe5e0f2b1a44/v3/images/look-3.webp",
+            "shadow_url": "https://demo.filatov.design/kit/dfadfe5e0f2b1a44/v3/images/shadow-3.webp",
+            "foot": 51,
+            "product_1": "brushed-cardigan",
+            "pin_1_x": 80,
+            "pin_1_y": 38,
+            "product_2": "faded-baggy-jeans",
+            "pin_2_x": 27,
+            "pin_2_y": 74,
+            "product_3": "trail-runners",
+            "pin_3_x": 72,
+            "pin_3_y": 91
+          }
+        },
+        "look_4": {
+          "type": "look",
+          "settings": {
+            "name": "Signal Lost",
+            "model_url": "https://demo.filatov.design/kit/dfadfe5e0f2b1a44/v3/images/look-4.webp",
+            "shadow_url": "https://demo.filatov.design/kit/dfadfe5e0f2b1a44/v3/images/shadow-4.webp",
+            "foot": 81,
+            "product_1": "cobalt-track-jacket",
+            "pin_1_x": 72,
+            "pin_1_y": 32,
+            "product_2": "cargo-trousers",
+            "pin_2_x": 42,
+            "pin_2_y": 62,
+            "product_3": "chrome-runners",
+            "pin_3_x": 20,
+            "pin_3_y": 86
+          }
+        },
+        "look_5": {
+          "type": "look",
+          "settings": {
+            "name": "Off Grid",
+            "model_url": "https://demo.filatov.design/kit/dfadfe5e0f2b1a44/v3/images/look-5.webp",
+            "shadow_url": "https://demo.filatov.design/kit/dfadfe5e0f2b1a44/v3/images/shadow-5.webp",
+            "foot": 51,
+            "product_1": "cable-knit-sweater",
+            "pin_1_x": 62,
+            "pin_1_y": 32,
+            "product_2": "utility-cargo",
+            "pin_2_x": 45,
+            "pin_2_y": 74,
+            "product_3": "canvas-skate-shoes",
+            "pin_3_x": 43,
+            "pin_3_y": 92
+          }
+        },
+        "look_6": {
+          "type": "look",
+          "settings": {
+            "name": "Static",
+            "model_url": "https://demo.filatov.design/kit/dfadfe5e0f2b1a44/v3/images/look-6.webp",
+            "shadow_url": "https://demo.filatov.design/kit/dfadfe5e0f2b1a44/v3/images/shadow-6.webp",
+            "foot": 12,
+            "product_1": "metallic-bomber",
+            "pin_1_x": 80,
+            "pin_1_y": 38,
+            "product_2": "dirty-wash-jeans",
+            "pin_2_x": 72,
+            "pin_2_y": 66,
+            "product_3": "mesh-runners",
+            "pin_3_x": 35,
+            "pin_3_y": 83
+          }
+        },
+        "look_7": {
+          "type": "look",
+          "settings": {
+            "name": "Side A",
+            "model_url": "https://demo.filatov.design/kit/dfadfe5e0f2b1a44/v3/images/look-7.webp",
+            "shadow_url": "https://demo.filatov.design/kit/dfadfe5e0f2b1a44/v3/images/shadow-7.webp",
+            "foot": 92,
+            "product_1": "cropped-sweatshirt",
+            "pin_1_x": 63,
+            "pin_1_y": 32,
+            "product_2": "wide-cord-trousers",
+            "pin_2_x": 29,
+            "pin_2_y": 69,
+            "product_3": "leather-court-shoes",
+            "pin_3_x": 73,
+            "pin_3_y": 86
+          }
+        },
+        "look_8": {
+          "type": "look",
+          "settings": {
+            "name": "Airplane Mode",
+            "model_url": "https://demo.filatov.design/kit/dfadfe5e0f2b1a44/v3/images/look-8.webp",
+            "shadow_url": "https://demo.filatov.design/kit/dfadfe5e0f2b1a44/v3/images/shadow-8.webp",
+            "foot": 46,
+            "product_1": "panel-camp-shirt",
+            "pin_1_x": 20,
+            "pin_1_y": 34,
+            "product_2": "parachute-pants",
+            "pin_2_x": 37,
+            "pin_2_y": 74,
+            "product_3": "white-trainers",
+            "pin_3_x": 56,
+            "pin_3_y": 90
+          }
+        },
+        "look_9": {
+          "type": "look",
+          "settings": {
+            "name": "Slow Hours",
+            "model_url": "https://demo.filatov.design/kit/dfadfe5e0f2b1a44/v3/images/look-9.webp",
+            "shadow_url": "https://demo.filatov.design/kit/dfadfe5e0f2b1a44/v3/images/shadow-9.webp",
+            "foot": 62,
+            "product_1": "knit-polo",
+            "pin_1_x": 72,
+            "pin_1_y": 36,
+            "product_2": "pleated-chinos",
+            "pin_2_x": 40,
+            "pin_2_y": 66,
+            "product_3": "suede-trainers",
+            "pin_3_x": 40,
+            "pin_3_y": 90
+          }
+        }
+      },
+      "block_order": [
+        "look_1",
+        "look_2",
+        "look_3",
+        "look_4",
+        "look_5",
+        "look_6",
+        "look_7",
+        "look_8",
+        "look_9"
+      ],
+      "settings": {
+        "title": "Go touch some grass, <em>dude.</em>",
+        "subtitle": "Drop 01. Nine looks for logging off. Drag the ring, pick a look, tap a dot to shop the piece.",
+        "receipt_line": "Drop 01 · Store 001 · Prague",
+        "receipt_thanks": "Thank you for logging off",
+        "discount": 0,
+        "index_label": "Index · Drop 01",
+        "menu": "main-menu",
+        "lb_hint": "Tap a dot to shop the piece",
+        "show_qr": true
+      }
+    }
+  },
+  "order": [
+    "ring"
+  ]
+}
