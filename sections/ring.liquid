@@ -85,7 +85,7 @@
       assign shadow = block.settings.shadow_url
     endif
   -%}
-  {"name": {{ block.settings.name | json }}, "foot": {{ block.settings.foot | divided_by: 1000.0 | json }}, "img": {{ img | json }}, "small": {{ small | json }}, "shadow": {{ shadow | json }},
+  {"id": {{ block.id | json }}, "name": {{ block.settings.name | json }}, "foot": {{ block.settings.foot | divided_by: 1000.0 | json }}, "img": {{ img | json }}, "small": {{ small | json }}, "shadow": {{ shadow | json }},
    "pins": [
     {%- assign first = true -%}
     {%- for k in (1..3) -%}
