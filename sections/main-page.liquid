@@ -1,0 +1,10 @@
+<div class="faq page">
+  <div class="shop__head">
+    <h1 class="shop__title">{{ page.title | escape }}</h1>
+  </div>
+  <div class="page__body rte">{{ page.content }}</div>
+</div>
+
+{% schema %}
+{ "name": "Page", "tag": "section", "settings": [] }
+{% endschema %}

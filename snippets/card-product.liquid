@@ -1,0 +1,25 @@
+{%- comment -%}
+  Product card: the piece on a paper tile, receipt-style caption. Accepts: product, index (number, for the
+  entrance stagger), eager (boolean)
+{%- endcomment -%}
+<li class="card" data-type="{{ product.type | handleize | default: 'other' }}" style="--i: {{ index | default: 0 }}">
+  <a class="card__link" href="{{ product.url }}">
+    <span class="card__tile">
+      {%- if product.featured_media -%}
+        {%- if eager -%}{%- assign load = 'eager' -%}{%- else -%}{%- assign load = 'lazy' -%}{%- endif -%}
+        {{ product.featured_media | image_url: width: 720 | image_tag: alt: product.featured_media.alt | default: product.title, widths: '240, 360, 480, 720', sizes: '(max-width: 809px) 50vw, 25vw', loading: load }}
+      {%- else -%}
+        {{ 'product-apparel-1' | placeholder_svg_tag: 'card__ph' }}
+      {%- endif -%}
+      {%- unless product.available -%}<span class="card__flag cap">Sold out</span>{%- endunless -%}
+    </span>
+    <span class="card__row">
+      <span class="card__name">{{ product.title | escape }}</span>
+      <span class="card__price">
+        {%- if product.price_varies -%}From {% endif -%}{{ product.price | money }}
+        {%- if product.compare_at_price > product.price %} <s class="pd__muted">{{ product.compare_at_price | money }}</s>{% endif -%}
+      </span>
+    </span>
+    <span class="card__row card__meta cap"><span>{{ product.type | escape }}</span>{%- if product.variants.size > 1 -%}<span>{{ product.variants.size }} sizes</span>{%- endif -%}</span>
+  </a>
+</li>

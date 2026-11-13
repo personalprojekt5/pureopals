@@ -1,0 +1,62 @@
+{%- comment -%} Shopify's contact form: messages go to the store's sender email (Settings → Notifications). {%- endcomment -%}
+<section class="contact" id="contact" aria-labelledby="h-contact-{{ section.id }}">
+  <div class="contact__intro">
+    {%- if section.settings.kicker != blank -%}<p class="cap">{{ section.settings.kicker | escape }}</p>{%- endif -%}
+    <h2 class="contact__title" id="h-contact-{{ section.id }}">{{ section.settings.title }}</h2>
+    <p class="contact__sub">{{ section.settings.sub | escape }}</p>
+  </div>
+  {%- form 'contact', class: 'contact__form', id: 'ContactForm' -%}
+    {%- if form.posted_successfully? -%}
+      <p class="field--wide contact__done" role="status" tabindex="-1" autofocus>{{ section.settings.success | escape }}</p>
+    {%- endif -%}
+    {%- if form.errors -%}
+      <div class="field--wide rw__msg" role="alert">{{ form.errors | default_errors }}</div>
+    {%- endif -%}
+    <div class="field">
+      <label class="cap" for="c-name">Name</label>
+      <input class="field__input" id="c-name" name="contact[name]" type="text" autocomplete="name" required value="{{ form.name | default: customer.name }}">
+    </div>
+    <div class="field">
+      <label class="cap" for="c-email">Email</label>
+      <input class="field__input" id="c-email" name="contact[email]" type="email" autocomplete="email" inputmode="email" required value="{{ form.email | default: customer.email }}">
+    </div>
+    {%- assign topics = section.settings.topics | split: ',' -%}
+    {%- if topics.size > 0 -%}
+      <fieldset class="field field--wide">
+        <legend class="cap">Topic</legend>
+        <div class="rw__sizes">
+          {%- for t in topics -%}
+            <label class="chip"><input type="radio" name="contact[topic]" value="{{ t | strip | escape }}"{% if forloop.first %} checked{% endif %}><span>{{ t | strip | escape }}</span></label>
+          {%- endfor -%}
+        </div>
+      </fieldset>
+    {%- endif -%}
+    <div class="field field--wide">
+      <label class="cap" for="c-order">Order number <span class="pd__muted">(optional)</span></label>
+      <input class="field__input" id="c-order" name="contact[order]" type="text" autocomplete="off">
+    </div>
+    <div class="field field--wide">
+      <label class="cap" for="c-msg">Message</label>
+      <textarea class="field__input field__area" id="c-msg" name="contact[body]" rows="5" required>{{ form.body }}</textarea>
+    </div>
+    <div class="field field--wide contact__send">
+      <button class="rw__cta contact__btn" type="submit"><span>Send message</span><svg width="22" height="12" viewBox="0 0 26 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 7h24M19 1l6 6-6 6"/></svg></button>
+    </div>
+  {%- endform -%}
+</section>
+
+{% schema %}
+{
+  "name": "Contact form",
+  "tag": "div",
+  "class": "contact-wrap",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Small line", "default": "Contact" },
+    { "type": "inline_richtext", "id": "title", "label": "Title", "default": "Still <em>stuck?</em>" },
+    { "type": "text", "id": "sub", "label": "Text", "default": "Write to us. A real person answers within two working days, usually from a park." },
+    { "type": "text", "id": "topics", "label": "Topics", "default": "Order, Shipping, Returns, Sizing, Other", "info": "Comma separated. Leave empty for none." },
+    { "type": "text", "id": "success", "label": "Thank-you message", "default": "Message sent. We'll answer within two working days. Now go outside." }
+  ],
+  "presets": [{ "name": "Contact form" }]
+}
+{% endschema %}

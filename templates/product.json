@@ -1,0 +1,6 @@
+{
+  "sections": {
+    "main": { "type": "main-product", "settings": { "kicker": "Drop 01", "size_hint": "Boxy fit, take your usual size", "open_description": false, "show_dynamic_checkout": false, "help_menu": "help" } }
+  },
+  "order": ["main"]
+}

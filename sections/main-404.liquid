@@ -1,0 +1,15 @@
+<div class="pw pw--404">
+  <div class="pw__box">
+    <p class="cap">404 · No signal</p>
+    <h1 class="pw__title">{{ section.settings.title }}</h1>
+    <p class="pw__sub">{{ section.settings.text | escape }}</p>
+    <p class="pg__nav"><a class="pill" href="{{ routes.root_url }}">The ring</a><a class="pill" href="{{ routes.all_products_collection_url }}">Shop all</a></p>
+  </div>
+</div>
+
+{% schema %}
+{ "name": "404", "tag": "section", "settings": [
+  { "type": "inline_richtext", "id": "title", "label": "Title", "default": "Page <em>offline.</em>" },
+  { "type": "text", "id": "text", "label": "Text", "default": "This page logged off for good. Try the ring instead." }
+] }
+{% endschema %}

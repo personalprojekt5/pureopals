@@ -1,0 +1,78 @@
+{%- comment -%}
+  FAQ: add a "Topic" block, then "Question" blocks under it; a "Size chart" block makes a table.
+  Topic links (#shipping) open their first question (assets/offline-common.js). Use on the page.faq template.
+{%- endcomment -%}
+<div class="faq">
+  <div class="shop__head">
+    <nav class="crumbs cap" aria-label="Breadcrumb"><a href="{{ routes.root_url }}">{{ section.settings.crumb | escape }}</a><span aria-hidden="true">/</span><span aria-current="page">{{ page.title | default: 'FAQ' | escape }}</span></nav>
+    <h1 class="shop__title">{{ section.settings.title }}</h1>
+    {%- if section.settings.sub != blank -%}<p class="shop__sub cap">{{ section.settings.sub | escape }}</p>{%- endif -%}
+    {%- if page.content != blank -%}<div class="shop__desc rte">{{ page.content }}</div>{%- endif -%}
+  </div>
+  <div class="faq__body">
+    <nav class="faq__toc" aria-label="Topics">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'topic' -%}<a class="pill" href="#{{ block.settings.anchor | default: block.settings.heading | handleize }}">{{ block.settings.short | default: block.settings.heading | escape }}</a>{%- endif -%}
+      {%- endfor -%}
+      {%- if section.settings.contact_link -%}<a class="pill faq__toc-contact" href="#contact">Contact</a>{%- endif -%}
+    </nav>
+    <div class="faq__groups">
+      {%- comment -%} Questions placed before the first topic get a group of their own {%- endcomment -%}
+      {%- if section.blocks.first.type != 'topic' -%}
+        <section class="faq__group">
+          {%- for q in section.blocks -%}
+            {%- if q.type == 'topic' -%}{%- break -%}{%- endif -%}
+            {% render 'faq-item', block: q %}
+          {%- endfor -%}
+        </section>
+      {%- endif -%}
+      {%- assign n = 0 -%}
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'topic' -%}
+          {%- assign n = n | plus: 1 -%}
+          {%- assign at = forloop.index0 -%}
+          <section class="faq__group" id="{{ block.settings.anchor | default: block.settings.heading | handleize }}" {{ block.shopify_attributes }}>
+            <h2 class="faq__h"><span class="cap">{{ n | prepend: '0' | slice: -2, 2 }}</span>{{ block.settings.heading | escape }}</h2>
+            {%- for q in section.blocks -%}
+              {%- if forloop.index0 <= at -%}{%- continue -%}{%- endif -%}
+              {%- if q.type == 'topic' -%}{%- break -%}{%- endif -%}
+              {% render 'faq-item', block: q %}
+            {%- endfor -%}
+          </section>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "FAQ",
+  "tag": "section",
+  "settings": [
+    { "type": "inline_richtext", "id": "title", "label": "Title", "default": "Good to <em>know.</em>" },
+    { "type": "text", "id": "sub", "label": "Line under the title", "default": "Shipping · Returns · Sizing · Care · Orders" },
+    { "type": "text", "id": "crumb", "label": "Breadcrumb start", "default": "Drop 01" },
+    { "type": "checkbox", "id": "contact_link", "label": "Add a Contact pill (to the form below)", "default": true }
+  ],
+  "blocks": [
+    { "type": "topic", "name": "Topic", "settings": [
+      { "type": "text", "id": "heading", "label": "Heading", "default": "Shipping" },
+      { "type": "text", "id": "short", "label": "Pill label (optional)" },
+      { "type": "text", "id": "anchor", "label": "Link name (optional)", "info": "e.g. shipping → link to it as /pages/faq#shipping" }
+    ] },
+    { "type": "question", "name": "Question", "settings": [
+      { "type": "text", "id": "question", "label": "Question", "default": "Question" },
+      { "type": "richtext", "id": "answer", "label": "Answer", "default": "<p>Answer</p>" },
+      { "type": "checkbox", "id": "open", "label": "Open by default", "default": false }
+    ] },
+    { "type": "chart", "name": "Size chart", "settings": [
+      { "type": "text", "id": "question", "label": "Title", "default": "Size chart" },
+      { "type": "text", "id": "caption", "label": "Caption", "default": "Body measurements in cm" },
+      { "type": "textarea", "id": "rows", "label": "Rows", "info": "One row per line, cells split with |. The first line is the header.", "default": " | S | M | L | XL\nChest | 88–94 | 94–100 | 100–106 | 106–112" },
+      { "type": "richtext", "id": "note", "label": "Note under the table" }
+    ] }
+  ],
+  "presets": [{ "name": "FAQ", "blocks": [{ "type": "topic" }, { "type": "question" }] }]
+}
+{% endschema %}

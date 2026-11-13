@@ -1,0 +1,30 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Offline",
+    "theme_version": "1.0.0",
+    "theme_author": "OFFLINE",
+    "theme_documentation_url": "https://github.com/personalprojekt5/pureopals/tree/shopify-theme#readme",
+    "theme_support_url": "https://github.com/personalprojekt5/pureopals/issues"
+  },
+  {
+    "name": "Logo",
+    "settings": [
+      { "type": "image_picker", "id": "logo", "label": "Logo", "info": "Shown in the status bar on every page, on the receipt and the bag. SVG or transparent PNG works best. Without a logo the shop name is set in type." },
+      { "type": "range", "id": "logo_width", "label": "Logo width in the status bar", "min": 40, "max": 240, "step": 4, "unit": "px", "default": 104 },
+      { "type": "checkbox", "id": "logo_reg", "label": "Add ® after the shop name (text logo only)", "default": true },
+      { "type": "image_picker", "id": "favicon", "label": "Favicon", "info": "Square, at least 64 × 64 px." },
+      { "type": "image_picker", "id": "share_image", "label": "Social share image", "info": "Shown when a link to the shop is shared and the page has no image of its own. 1200 × 630 px." }
+    ]
+  },
+  {
+    "name": "Colours",
+    "settings": [
+      { "type": "paragraph", "content": "Black and white UI on a studio floor: colour comes from the photos." },
+      { "type": "color", "id": "color_studio", "label": "Studio floor (background)", "default": "#ECECEC" },
+      { "type": "color", "id": "color_paper", "label": "Paper (pills, receipt)", "default": "#FFFFFF" },
+      { "type": "color", "id": "color_ink", "label": "Ink (text, lines, buttons)", "default": "#000000" },
+      { "type": "color", "id": "color_muted", "label": "Muted text", "default": "#6F6F6F" }
+    ]
+  }
+]

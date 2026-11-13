@@ -1,0 +1,23 @@
+<article class="jr jr--article">
+  <div class="shop__head">
+    <nav class="crumbs cap" aria-label="Breadcrumb"><a href="{{ blog.url }}">{{ blog.title | escape }}</a><span aria-hidden="true">/</span><span aria-current="page">{{ article.title | escape }}</span></nav>
+  </div>
+  <header class="jr__story-head">
+    <p class="cap">{{ article.published_at | date: '%d.%m.%Y' }}{% if article.author != blank and section.settings.show_author %} · {{ article.author | escape }}{% endif %}</p>
+    <h1 class="jr__story-title">{{ article.title | escape }}</h1>
+    {%- if article.excerpt != blank -%}<div class="jr__lead">{{ article.excerpt | strip_html }}</div>{%- endif -%}
+  </header>
+  {%- if article.image -%}
+    <figure class="jr__hero">{{ article.image | image_url: width: 2000 | image_tag: alt: article.image.alt | default: article.title, widths: '720, 1200, 1600, 2000', sizes: '100vw', loading: 'eager' }}</figure>
+  {%- endif -%}
+  <div class="jr__body rte">{{ article.content }}</div>
+  <nav class="pd__pager" aria-label="More stories">
+    {%- if blog.previous_article -%}<a class="pd__page" href="{{ blog.previous_article.url }}" rel="prev"><span class="cap pd__muted">Previous</span><span class="pd__page-name">{{ blog.previous_article.title | escape }}</span></a>{%- else -%}<span></span>{%- endif -%}
+    <a class="pill" href="{{ blog.url }}">{{ blog.title | escape }}</a>
+    {%- if blog.next_article -%}<a class="pd__page pd__page--next" href="{{ blog.next_article.url }}" rel="next"><span class="cap pd__muted">Next</span><span class="pd__page-name">{{ blog.next_article.title | escape }}</span></a>{%- else -%}<span></span>{%- endif -%}
+  </nav>
+</article>
+
+{% schema %}
+{ "name": "Story", "tag": "section", "settings": [ { "type": "checkbox", "id": "show_author", "label": "Show author", "default": false } ] }
+{% endschema %}

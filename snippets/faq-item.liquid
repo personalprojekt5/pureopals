@@ -1,0 +1,30 @@
+{%- comment -%} One FAQ entry (question or size chart). Accepts: block {%- endcomment -%}
+{%- case block.type -%}
+  {%- when 'question' -%}
+  <details class="faq__q"{% if block.settings.open %} open{% endif %} {{ block.shopify_attributes }}>
+    <summary>{{ block.settings.question | escape }}</summary>
+    <div class="faq__a rte">{{ block.settings.answer }}</div>
+  </details>
+  {%- when 'chart' -%}
+  <details class="faq__q" {{ block.shopify_attributes }}>
+    <summary>{{ block.settings.question | escape }}</summary>
+    <div class="faq__a">
+      {%- assign rows = block.settings.rows | newline_to_br | split: '<br />' -%}
+      <div class="faq__scroll">
+        <table class="faq__chart">
+          {%- if block.settings.caption != blank -%}<caption class="cap">{{ block.settings.caption | escape }}</caption>{%- endif -%}
+          {%- assign head = rows.first | strip | split: '|' -%}
+          <thead><tr>{%- for c in head -%}<th scope="col">{{ c | strip | escape }}</th>{%- endfor -%}</tr></thead>
+          <tbody>
+            {%- for row in rows offset: 1 -%}
+              {%- assign cells = row | strip | split: '|' -%}
+              {%- if cells.size == 0 -%}{%- continue -%}{%- endif -%}
+              <tr>{%- for c in cells -%}{%- if forloop.first -%}<th scope="row">{{ c | strip | escape }}</th>{%- else -%}<td>{{ c | strip | escape }}</td>{%- endif -%}{%- endfor -%}</tr>
+            {%- endfor -%}
+          </tbody>
+        </table>
+      </div>
+      {%- if block.settings.note != blank -%}<div class="rte">{{ block.settings.note }}</div>{%- endif -%}
+    </div>
+  </details>
+{%- endcase -%}

@@ -1,0 +1,49 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-blog",
+      "settings": {}
+    },
+    "films": {
+      "type": "films",
+      "blocks": {
+        "film_1": {
+          "type": "film",
+          "settings": {
+            "title": "Drop 01 — Go touch some grass",
+            "caption": "Campaign film · 1:30",
+            "wide": true
+          }
+        },
+        "film_2": {
+          "type": "film",
+          "settings": {
+            "title": "Off Grid",
+            "caption": "Look film · 0:45",
+            "wide": false
+          }
+        },
+        "film_3": {
+          "type": "film",
+          "settings": {
+            "title": "Behind the ring",
+            "caption": "Backstage · 2:10",
+            "wide": false
+          }
+        }
+      },
+      "block_order": [
+        "film_1",
+        "film_2",
+        "film_3"
+      ],
+      "settings": {
+        "title": "<em>Films.</em>"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "films"
+  ]
+}

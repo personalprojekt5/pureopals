@@ -1,0 +1,25 @@
+{%- comment -%}
+  The phone-style status bar: clock, "No service", logo, battery, and either the Bag pill or (on the landing
+  page) the Password switch. Accepts: show_status (boolean), signal (string), right ('bag' | 'password')
+{%- endcomment -%}
+<header class="top">
+  {%- if show_status -%}
+    <span class="status status--time cap" data-clock aria-hidden="true">06:00</span>
+    <span class="status status--signal cap" aria-hidden="true"><span class="bars"><i></i><i></i><i></i><i></i></span><span class="status__txt">{{ signal }}</span></span>
+  {%- else -%}
+    <span class="status--signal"></span>
+  {%- endif -%}
+  {%- if right == 'password' -%}
+    {% render 'logo', class: 'logo', link: false %}
+  {%- else -%}
+    {% render 'logo', class: 'logo' %}
+  {%- endif -%}
+  {%- if show_status -%}
+    <span class="status status--battery cap" aria-hidden="true"><span class="batt"><i></i></span>12%</span>
+  {%- endif -%}
+  {%- if right == 'password' -%}
+    <button class="pill pw__switch" type="button" data-to-pass aria-expanded="false">Password</button>
+  {%- else -%}
+    <a class="bagbtn pill" href="{{ routes.cart_url }}" data-bag aria-label="Bag, {{ cart.item_count }} {{ cart.item_count | pluralize: 'item', 'items' }}">Bag (<span class="count" data-count>{{ cart.item_count }}</span>)</a>
+  {%- endif -%}
+</header>

@@ -1,0 +1,14 @@
+{%- comment -%} Status bar on every page. The logo itself is in Theme settings → Logo. {%- endcomment -%}
+{% render 'status-bar', show_status: section.settings.show_status, signal: section.settings.signal_text, right: 'bag' %}
+
+{% schema %}
+{
+  "name": "Status bar",
+  "class": "header-wrap",
+  "settings": [
+    { "type": "paragraph", "content": "Upload your logo in Theme settings → Logo." },
+    { "type": "checkbox", "id": "show_status", "label": "Show clock, signal and battery", "default": true },
+    { "type": "text", "id": "signal_text", "label": "Signal text", "default": "No service" }
+  ]
+}
+{% endschema %}

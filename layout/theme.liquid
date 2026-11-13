@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="{{ settings.color_studio }}">
+  <link rel="canonical" href="{{ canonical_url }}">
+  {%- if settings.favicon != blank %}
+    <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 64, height: 64 }}">
+  {%- endif %}
+  <title>
+    {{ page_title }}
+    {%- if current_tags %} – {{ current_tags | join: ', ' }}{% endif -%}
+    {%- if current_page != 1 %} – Page {{ current_page }}{% endif -%}
+    {%- unless page_title contains shop.name %} — {{ shop.name }}{% endunless -%}
+  </title>
+  {%- if page_description %}
+    <meta name="description" content="{{ page_description | escape }}">
+  {%- endif %}
+  {% render 'meta-tags' %}
+  <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+  <link href="https://api.fontshare.com/v2/css?f[]=switzer@300,301,400&display=swap" rel="stylesheet">
+  {% render 'theme-vars' %}
+  {{ 'base.css' | asset_url | stylesheet_tag }}
+  {{ 'pages.css' | asset_url | stylesheet_tag }}
+  {% render 'routes' %}
+  <script src="{{ 'offline-common.js' | asset_url }}" defer="defer"></script>
+  {{ content_for_header }}
+</head>
+<body class="{% if template.name == 'index' %}is-home{% else %}pg{% endif %} t-{{ template.name }}">
+  <a class="skip pill" href="#main">Skip to content</a>
+  {% sections 'header-group' %}
+  <main id="main" tabindex="-1">
+    {{ content_for_layout }}
+  </main>
+  {% sections 'footer-group' %}
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<div class="shop">
+  <div class="shop__head">
+    <h1 class="shop__title">{{ section.settings.title }}</h1>
+    <form class="pw__form search__form" action="{{ routes.search_url }}" method="get" role="search">
+      <label class="pw__label cap" for="q">Search</label>
+      <div class="pw__row">
+        <input class="pw__input" id="q" type="search" name="q" value="{{ search.terms | escape }}" placeholder="Search pieces" autocomplete="off">
+        <input type="hidden" name="type" value="product">
+        <button class="pw__go" type="submit" aria-label="Search"><svg width="22" height="12" viewBox="0 0 26 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 7h24M19 1l6 6-6 6"/></svg></button>
+      </div>
+    </form>
+    {%- if search.performed -%}<p class="shop__sub cap">{{ search.results_count }} {{ search.results_count | pluralize: 'result', 'results' }} for “{{ search.terms | escape }}”</p>{%- endif -%}
+  </div>
+  {%- if search.performed -%}
+    {%- paginate search.results by 24 -%}
+      <ul class="shop__grid is-in" role="list">
+        {%- for item in search.results -%}
+          {%- if item.object_type == 'product' -%}{% render 'card-product', product: item, index: forloop.index0 %}{%- endif -%}
+        {%- endfor -%}
+      </ul>
+      {%- if paginate.pages > 1 -%}<nav class="pd__pager" aria-label="Pages">{{ paginate | default_pagination }}</nav>{%- endif -%}
+    {%- endpaginate -%}
+  {%- endif -%}
+</div>
+
+{% schema %}
+{ "name": "Search", "tag": "section", "settings": [ { "type": "inline_richtext", "id": "title", "label": "Title", "default": "<em>Search.</em>" } ] }
+{% endschema %}

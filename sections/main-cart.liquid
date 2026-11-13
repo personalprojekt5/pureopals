@@ -1,0 +1,76 @@
+{%- comment -%} The bag: a receipt with every line, quantities, subtotal and checkout. {%- endcomment -%}
+<div class="cart">
+  <div class="shop__head">
+    <nav class="crumbs cap" aria-label="Breadcrumb"><a href="{{ routes.all_products_collection_url }}">Shop all</a><span aria-hidden="true">/</span><span aria-current="page">Bag</span></nav>
+    <h1 class="shop__title">{{ section.settings.title }}</h1>
+  </div>
+  {%- if cart.item_count > 0 -%}
+    <form class="cart__rcpt" action="{{ routes.cart_url }}" method="post" novalidate data-cart-form>
+      <div class="rcpt-head">
+        {% render 'logo', class: 'rcpt-logo', link: false, size: 'large' %}
+        <span class="cap">{{ section.settings.receipt_line | escape }}</span>
+        <span class="cap">{{ cart.item_count }} {{ cart.item_count | pluralize: 'piece', 'pieces' }}</span>
+      </div>
+      <ul class="cart__items" role="list">
+        {%- for item in cart.items -%}
+          <li class="cart__item">
+            <a class="cart__img" href="{{ item.url }}">{%- if item.image -%}{{ item.image | image_url: width: 192, height: 192, crop: 'center' | image_tag: alt: '', width: 72, height: 72, loading: 'lazy' }}{%- endif -%}</a>
+            <div class="cart__txt">
+              <a class="rw__name" href="{{ item.url }}">{{ item.product.title | escape }}</a>
+              {%- unless item.product.has_only_default_variant -%}<span class="cap pd__muted">{{ item.variant.title | escape }}</span>{%- endunless -%}
+              {%- for d in item.line_level_discount_allocations -%}<span class="cap">{{ d.discount_application.title | escape }} −{{ d.amount | money }}</span>{%- endfor -%}
+            </div>
+            <div class="cart__qty">
+              <label class="cap visually-hidden" for="q-{{ forloop.index }}">Quantity</label>
+              <input class="cart__qty-in" id="q-{{ forloop.index }}" type="number" name="updates[]" value="{{ item.quantity }}" min="0" inputmode="numeric">
+              <a class="cart__remove cap" href="{{ item.url_to_remove }}" aria-label="Remove {{ item.product.title | escape }}">Remove</a>
+            </div>
+            <span class="cart__price">
+              {%- if item.original_line_price != item.final_line_price -%}<s class="pd__muted">{{ item.original_line_price | money }}</s> {% endif -%}
+              {{ item.final_line_price | money }}
+            </span>
+          </li>
+        {%- endfor -%}
+      </ul>
+      <div class="rw__bundle">
+        <dl class="rcpt-sum">
+          {%- for d in cart.cart_level_discount_applications -%}
+            <div><dt class="cap">{{ d.title | escape }}</dt><dd class="cap">−{{ d.total_allocated_amount | money }}</dd></div>
+          {%- endfor -%}
+          <div class="rcpt-total"><dt>Total</dt><dd>{{ cart.total_price | money }}</dd></div>
+        </dl>
+        <p class="cap pd__muted">{{ section.settings.tax_note | escape }}</p>
+        {%- if section.settings.show_note -%}
+          <label class="cap" for="cart-note">Note</label>
+          <textarea class="field__input field__area cart__note" id="cart-note" name="note" rows="2">{{ cart.note }}</textarea>
+        {%- endif -%}
+        <noscript><button class="pill" type="submit" name="update">Update bag</button></noscript>
+        <button class="rw__cta" type="submit" name="checkout"><span>Check out</span><svg width="22" height="12" viewBox="0 0 26 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 7h24M19 1l6 6-6 6"/></svg></button>
+        {%- if additional_checkout_buttons and section.settings.show_express -%}<div class="cart__express">{{ content_for_additional_checkout_buttons }}</div>{%- endif -%}
+      </div>
+      <div class="rcpt-foot" aria-hidden="true"><span class="rcpt-bar"></span><span class="cap">{{ section.settings.thanks | escape }}</span></div>
+    </form>
+  {%- else -%}
+    <div class="cart__empty">
+      <p class="pw__sub">{{ section.settings.empty_text | escape }}</p>
+      <a class="pill" href="{{ routes.all_products_collection_url }}">Shop all</a>
+      <a class="pill" href="{{ routes.root_url }}">The ring</a>
+    </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Bag",
+  "tag": "section",
+  "settings": [
+    { "type": "inline_richtext", "id": "title", "label": "Title", "default": "Your <em>bag.</em>" },
+    { "type": "text", "id": "receipt_line", "label": "Line under the logo", "default": "Drop 01 · Store 001 · Prague" },
+    { "type": "text", "id": "tax_note", "label": "Tax and shipping note", "default": "Taxes and shipping calculated at checkout" },
+    { "type": "text", "id": "thanks", "label": "Sign-off", "default": "Thank you for logging off" },
+    { "type": "text", "id": "empty_text", "label": "Empty bag text", "default": "Your bag is empty. Good: you're outside." },
+    { "type": "checkbox", "id": "show_note", "label": "Allow an order note", "default": false },
+    { "type": "checkbox", "id": "show_express", "label": "Show express checkout buttons", "default": true }
+  ]
+}
+{% endschema %}

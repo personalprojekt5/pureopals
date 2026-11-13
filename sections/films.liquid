@@ -1,0 +1,60 @@
+{%- comment -%}
+  Films: one block per video. YouTube / Vimeo link, or a video uploaded to Shopify. The player loads only when
+  someone presses play (assets/offline-films.js). A block without a video shows "Coming soon".
+{%- endcomment -%}
+<section class="jr jr__films" id="films" aria-labelledby="h-films-{{ section.id }}">
+  <h2 class="pd__more-title" id="h-films-{{ section.id }}">{{ section.settings.title }}</h2>
+  <div class="jr__film-grid">
+    {%- for block in section.blocks -%}
+      {%- assign url = block.settings.video_url -%}
+      {%- assign ready = false -%}
+      {%- if url != blank or block.settings.video != blank -%}{%- assign ready = true -%}{%- endif -%}
+      <figure class="jr__film{% if block.settings.wide %} jr__film--wide{% endif %}{% unless ready %} is-soon{% endunless %}" {{ block.shopify_attributes }}>
+        <div class="jr__screen">
+          <div class="jr__poster">
+            {%- if block.settings.poster != blank -%}
+              {{ block.settings.poster | image_url: width: 1600 | image_tag: alt: '', widths: '480, 800, 1200, 1600', sizes: '(max-width: 809px) 100vw, 50vw', loading: 'lazy', class: 'jr__poster-img' }}
+            {%- elsif block.settings.video != blank and block.settings.video.preview_image -%}
+              {{ block.settings.video.preview_image | image_url: width: 1600 | image_tag: alt: '', loading: 'lazy', class: 'jr__poster-img' }}
+            {%- endif -%}
+          </div>
+          {%- if ready -%}
+            <button class="jr__play" type="button" aria-label="Play: {{ block.settings.title | escape }}"><span class="jr__play-dot"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="cap">Play</span></button>
+            <template>
+              {%- if url != blank and url.type == 'youtube' -%}
+                <iframe src="https://www.youtube-nocookie.com/embed/{{ url.id }}?autoplay=1&rel=0&modestbranding=1" title="{{ block.settings.title | escape }}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>
+              {%- elsif url != blank and url.type == 'vimeo' -%}
+                <iframe src="https://player.vimeo.com/video/{{ url.id }}?autoplay=1&dnt=1" title="{{ block.settings.title | escape }}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+              {%- else -%}
+                {{ block.settings.video | video_tag: controls: true, autoplay: true, playsinline: true }}
+              {%- endif -%}
+            </template>
+          {%- else -%}
+            <span class="jr__soon cap">Coming soon</span>
+          {%- endif -%}
+        </div>
+        <figcaption><span class="card__name">{{ block.settings.title | escape }}</span><span class="cap pd__muted">{{ block.settings.caption | escape }}</span></figcaption>
+      </figure>
+    {%- endfor -%}
+  </div>
+</section>
+<script src="{{ 'offline-films.js' | asset_url }}" defer="defer"></script>
+
+{% schema %}
+{
+  "name": "Films",
+  "tag": "div",
+  "settings": [ { "type": "inline_richtext", "id": "title", "label": "Title", "default": "<em>Films.</em>" } ],
+  "blocks": [
+    { "type": "film", "name": "Film", "settings": [
+      { "type": "text", "id": "title", "label": "Title", "default": "Drop 01 — Go touch some grass" },
+      { "type": "text", "id": "caption", "label": "Caption", "default": "Campaign film · 1:30" },
+      { "type": "video_url", "id": "video_url", "label": "YouTube or Vimeo link", "accept": ["youtube", "vimeo"] },
+      { "type": "video", "id": "video", "label": "…or upload a video", "info": "Used when there is no link above." },
+      { "type": "image_picker", "id": "poster", "label": "Cover image" },
+      { "type": "checkbox", "id": "wide", "label": "Full width", "default": false }
+    ] }
+  ],
+  "presets": [{ "name": "Films", "blocks": [{ "type": "film" }] }]
+}
+{% endschema %}

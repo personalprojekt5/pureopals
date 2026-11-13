@@ -1,0 +1,1 @@
+{ "sections": { "main": { "type": "main-collection", "settings": { "all_title": "All <em>pieces.</em>", "crumb": "Drop 01", "show_filters": true, "per_page": 48 } } }, "order": ["main"] }

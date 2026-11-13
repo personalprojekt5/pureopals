@@ -1,0 +1,21 @@
+<div class="shop">
+  <div class="shop__head">
+    <h1 class="shop__title">{{ section.settings.title }}</h1>
+  </div>
+  <ul class="shop__grid is-in" role="list">
+    {%- for c in collections -%}
+      <li class="card" style="--i: {{ forloop.index0 }}">
+        <a class="card__link" href="{{ c.url }}">
+          <span class="card__tile">
+            {%- if c.featured_image -%}{{ c.featured_image | image_url: width: 720 | image_tag: alt: c.title, widths: '360, 720', sizes: '(max-width: 809px) 50vw, 25vw', loading: 'lazy' }}{%- else -%}{{ 'collection-1' | placeholder_svg_tag: 'card__ph' }}{%- endif -%}
+          </span>
+          <span class="card__row"><span class="card__name">{{ c.title | escape }}</span><span class="card__price">{{ c.products_count }}</span></span>
+        </a>
+      </li>
+    {%- endfor -%}
+  </ul>
+</div>
+
+{% schema %}
+{ "name": "Collections list", "tag": "section", "settings": [ { "type": "inline_richtext", "id": "title", "label": "Title", "default": "All <em>collections.</em>" } ] }
+{% endschema %}
