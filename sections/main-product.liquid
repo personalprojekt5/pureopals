@@ -16,7 +16,7 @@
     assign require_size = true
   endif
 -%}
-<div class="pd" data-product data-title="{{ product.title | escape }}" data-require-size="{{ require_size }}">
+<div class="pd" data-product data-title="{{ product.title | escape }}" data-require-size="{{ require_size }}" data-zoom-mode="{{ section.settings.zoom | default: 'hover' }}">
   <div class="pd__top">
     <div class="pd__media">
       {%- if product.media.size > 0 -%}
@@ -25,7 +25,14 @@
             {%- case media.media_type -%}
               {%- when 'image' -%}
                 {%- if forloop.first -%}{%- assign load = 'eager' -%}{%- else -%}{%- assign load = 'lazy' -%}{%- endif -%}
-                {{ media | image_url: width: 1600 | image_tag: alt: media.alt | default: product.title, widths: '480, 720, 960, 1200, 1600', sizes: '(max-width: 809px) 100vw, 60vw', loading: load }}
+                {%- assign media_alt = media.alt | default: product.title -%}
+                {%- if section.settings.zoom != 'off' -%}
+                  <button class="pd__zoom" type="button" data-zoom="{{ media | image_url: width: 2400 }}" aria-label="Zoom in: {{ media_alt | escape }}">
+                    {{ media | image_url: width: 1600 | image_tag: alt: media_alt, widths: '480, 720, 960, 1200, 1600', sizes: '(max-width: 809px) 100vw, 60vw', loading: load }}
+                  </button>
+                {%- else -%}
+                  {{ media | image_url: width: 1600 | image_tag: alt: media_alt, widths: '480, 720, 960, 1200, 1600', sizes: '(max-width: 809px) 100vw, 60vw', loading: load }}
+                {%- endif -%}
               {%- when 'video' -%}
                 {{ media | video_tag: controls: true, playsinline: true, image_size: '1200x' }}
               {%- when 'external_video' -%}
@@ -122,6 +129,11 @@
   "class": "pd-wrap",
   "settings": [
     { "type": "text", "id": "kicker", "label": "Line above the name", "default": "Drop 01" },
+    { "type": "select", "id": "zoom", "label": "Photo zoom", "default": "hover", "options": [
+      { "value": "hover", "label": "Magnify on hover, full screen on click" },
+      { "value": "click", "label": "Full screen on click / tap only" },
+      { "value": "off", "label": "Off" }
+    ] },
     { "type": "text", "id": "size_hint", "label": "Size hint", "default": "Boxy fit, take your usual size" },
     { "type": "checkbox", "id": "open_description", "label": "Show the description open", "default": false },
     { "type": "checkbox", "id": "show_dynamic_checkout", "label": "Show Apple Pay / Shop Pay buttons", "default": false },

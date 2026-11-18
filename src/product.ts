@@ -2,10 +2,12 @@
 // Shopify cart without leaving the page, and the two recommendation strips. Without JavaScript the form still
 // posts to /cart/add with the first available variant.
 import { cartAdd, CartError, money, toast } from "./shopify"
+import { initZoom } from "./zoom"
 
 type Variant = { id: number; options: string[]; available: boolean; price: number; compare_at_price: number | null }
 
 document.querySelectorAll<HTMLElement>("[data-product]").forEach((root) => {
+  initZoom(root, root.dataset.zoomMode || "hover")
   const variants = JSON.parse(root.querySelector("[data-product-json]")?.textContent || "[]") as Variant[]
   const form = root.querySelector<HTMLFormElement>("form[data-product-form]")
   if (!form || !variants.length) return

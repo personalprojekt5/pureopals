@@ -9,6 +9,7 @@ the theme editor — no code:
 | Logo, favicon, colours | Online Store → Themes → Customize → **Theme settings** |
 | The nine looks on the ring (model photo, three products, dot positions) | Customize → Home page → **Ring** → each **Look** block |
 | Products, prices, sizes, photos | **Products** (sizes are variants with an option called "Size") |
+| Product photo zoom | Customize → Products → **Product** section → *Photo zoom* (magnify on hover + full screen, full screen only, or off) |
 | Landing page + password | **Online Store → Preferences → Password protection**, design in Customize → Password page |
 | Landing page images | Customize → Password page → **Image** (logo / wordmark; above or below the title, or below the email box), **Background video** (muted loop, Pause button) or **Background photo**, and the **Model in the line** blocks — tall cut-outs of people only (add, remove, reorder; the line resizes to fit) |
 | Email sign-ups from the landing page | **Customers** (tagged `newsletter`, email marketing consent) |
