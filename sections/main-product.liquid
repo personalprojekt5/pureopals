@@ -16,7 +16,7 @@
     assign require_size = true
   endif
 -%}
-<div class="pd" data-product data-title="{{ product.title | escape }}" data-require-size="{{ require_size }}" data-zoom-mode="{{ section.settings.zoom | default: 'hover' }}">
+<div class="pd" data-product data-title="{{ product.title | escape }}" data-require-size="{{ require_size }}" data-zoom-mode="{{ section.settings.zoom | default: 'inline' }}">
   <div class="pd__top">
     <div class="pd__media">
       {%- if product.media.size > 0 -%}
@@ -129,8 +129,8 @@
   "class": "pd-wrap",
   "settings": [
     { "type": "text", "id": "kicker", "label": "Line above the name", "default": "Drop 01" },
-    { "type": "select", "id": "zoom", "label": "Photo zoom", "default": "hover", "options": [
-      { "value": "hover", "label": "Magnify on hover, full screen on click" },
+    { "type": "select", "id": "zoom", "label": "Photo zoom", "default": "inline", "options": [
+      { "value": "inline", "label": "Click to zoom in place (phones: full screen)" },
       { "value": "click", "label": "Full screen on click / tap only" },
       { "value": "off", "label": "Off" }
     ] },

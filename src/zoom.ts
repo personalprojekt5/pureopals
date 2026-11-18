@@ -1,6 +1,7 @@
 // Product photo zoom (sections/main-product.liquid → "Photo zoom" setting).
-//   hover: on a mouse, the photo magnifies 2x under the cursor; click opens the full-screen viewer
-//   click: click / tap opens the full-screen viewer
+//   inline: on a mouse, hovering shows the magnifier cursor and a click zooms in place (like a fashion store);
+//           touch and keyboard open the full-screen viewer
+//   click:  click / tap opens the full-screen viewer
 // Viewer: tap or click to zoom in at that point (2.5x), pinch or trackpad-scroll to zoom 1–4x, drag to pan
 // (a mouse pans by just moving), arrows / swipe for the next photo, Esc or Close to leave.
 
@@ -15,26 +16,34 @@ export function initZoom(root: HTMLElement, mode: string) {
   if (!triggers.length) return
   const items = triggers.map((t) => ({ src: t.dataset.zoom!, alt: t.querySelector("img")?.alt || "" }))
 
-  // ---------- inline magnifier (mouse only) ----------
-  if (fine && mode === "hover") triggers.forEach((t) => {
+  // ---------- in place (mouse only): hovering shows the magnifier cursor, a click zooms ----------
+  // Click zooms the photo 2.5x where you clicked; moving the mouse looks around; click again or move off the
+  // photo to zoom back out. Keyboard (Enter / Space) and touch open the full-screen viewer instead.
+  const inline = fine && (mode === "inline" || mode === "hover")
+  if (inline) triggers.forEach((t) => {
     const img = t.querySelector<HTMLImageElement>("img"); if (!img) return
-    t.addEventListener("pointerenter", (e) => {
-      if (e.pointerType !== "mouse") return
-      t.classList.add("is-hover")
-      if (!img.dataset.hi) {   // swap in the large file once, so the magnified view stays sharp
-        img.dataset.hi = "1"
-        const hi = new Image(); hi.src = t.dataset.zoom!
-        hi.onload = () => { img.removeAttribute("srcset"); img.removeAttribute("sizes"); img.src = hi.src }
-      }
-    })
-    t.addEventListener("pointermove", (e) => {
-      // measure the photo at its normal size (getBoundingClientRect would include the 2x magnification);
-      // it sits centred in the button
+    const sharpen = () => {   // swap in the large file once, so the zoomed photo stays sharp
+      if (img.dataset.hi) return
+      img.dataset.hi = "1"
+      const hi = new Image(); hi.src = t.dataset.zoom!
+      hi.onload = () => { img.removeAttribute("srcset"); img.removeAttribute("sizes"); img.src = hi.src }
+    }
+    // the photo's place at its normal size (getBoundingClientRect would include the zoom); it is centred
+    const aim = (e: PointerEvent | MouseEvent) => {
       const tr = t.getBoundingClientRect(), w = img.offsetWidth, h = img.offsetHeight
       const left = tr.left + (tr.width - w) / 2, top = tr.top + (tr.height - h) / 2
       img.style.transformOrigin = `${clamp((e.clientX - left) / w, 0, 1) * 100}% ${clamp((e.clientY - top) / h, 0, 1) * 100}%`
+    }
+    const set = (on: boolean) => { t.classList.toggle("is-zoomed", on); t.setAttribute("aria-label", `${on ? "Zoom out" : "Zoom in"}: ${img.alt}`) }
+    t.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") sharpen() })
+    t.addEventListener("pointermove", (e) => { if (t.classList.contains("is-zoomed")) aim(e) })
+    t.addEventListener("pointerleave", () => set(false))
+    t.addEventListener("click", (e) => {
+      if (e.detail === 0) return   // keyboard: handled below, opens the viewer
+      e.preventDefault(); e.stopImmediatePropagation()
+      if (t.classList.contains("is-zoomed")) { set(false); return }
+      aim(e); sharpen(); set(true)
     })
-    t.addEventListener("pointerleave", () => t.classList.remove("is-hover"))
   })
 
   // ---------- full-screen viewer ----------
@@ -161,5 +170,5 @@ export function initZoom(root: HTMLElement, mode: string) {
     } else if (scale === 1 && Math.abs(dx) > 60 && items.length > 1) show(dx < 0 ? i + 1 : i - 1)   // swipe
   }
 
-  triggers.forEach((t, n) => t.addEventListener("click", (e) => { e.preventDefault(); t.classList.remove("is-hover"); open(n) }))
+  triggers.forEach((t, n) => t.addEventListener("click", (e) => { e.preventDefault(); t.classList.remove("is-zoomed"); open(n) }))
 }

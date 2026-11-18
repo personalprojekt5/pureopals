@@ -487,7 +487,9 @@ main:focus { outline: none; }
 .pd__zoom { display: grid; place-items: center; width: 100%; padding: 0; border: 0; background: none; overflow: hidden; cursor: zoom-in; }
 .pd__zoom:focus-visible { outline: 1px solid var(--ink); outline-offset: -4px; border-radius: 0; }
 .pd__zoom img { transition: transform .5s var(--ease); }
-.pd__zoom.is-hover img { transform: scale(2); }
+/* clicked: zoomed in place, following the mouse (src/zoom.ts sets the transform-origin) */
+.pd__zoom.is-zoomed { cursor: zoom-out; }
+.pd__zoom.is-zoomed img { transform: scale(2.5); transition: transform .5s var(--ease), transform-origin .12s linear; }
 html.zm-lock { overflow: hidden; }
 .zm { position: fixed; inset: 0; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: var(--studio); color: var(--ink); overflow: hidden; }
 .zm[open] { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; animation: zm-in .35s var(--ease); }
